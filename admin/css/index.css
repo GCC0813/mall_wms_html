@@ -1,0 +1,8 @@
+#time{
+    width:180px;
+    height: 45px;
+    text-align:center;
+    display: inline-block;
+    overflow:hidden;float:left;
+    font-style:normal
+}
