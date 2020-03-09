@@ -40,7 +40,7 @@
     <script>
         $(function  () {
             layui.use('form', function(){
-            layer.msg('欢迎来到商城仓储管理系统，请先登陆！！', {
+            layer.msg('欢迎登陆商城仓储管理系统！', {
                 offset: '20px'
                 ,icon: 1
             });
@@ -66,11 +66,11 @@
                 };
                 $.post(domain+'/user/login', objToJson(obj), function (res) {
                     if(res.code === 200){
-                        layer.msg("登陆成功 ！",function () {
-                            location.href='http://www.baidu.com'
+                        layer.msg("登陆成功 ！",{icon:6},function () {
+                            location.href='./html/index.html'
                         });
                     }else {
-                        layer.msg(res.msg);
+                        layer.msg(res.msg,{icon:5})
                     }
                 });
                 return false;
