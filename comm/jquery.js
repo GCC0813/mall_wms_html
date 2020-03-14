@@ -8285,7 +8285,10 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 			dataType: type,
 			data: data,
 			success: callback,
-			contentType: "application/json;charset=UTF-8"
+			contentType: "application/json;charset=UTF-8",
+			xhrFields:{
+				withCredentials:true
+			}
 		});
 	};
 });

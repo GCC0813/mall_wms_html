@@ -1,4 +1,4 @@
-let domain = 'http://127.0.0.1:10001/wms-api';
+let domain = 'http://localhost:10001/wms-api';
 
 function getData(url,obj) {
     return $.post(url, objToJson(obj),function (data) {
