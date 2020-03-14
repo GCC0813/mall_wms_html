@@ -21,10 +21,20 @@
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-header">数据统计</div>
                         <div class="layui-card-body ">
-                            <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog">
-                                <li class="layui-col-md2 layui-col-xs6">
+                            <blockquote class="layui-elem-quote" >欢迎管理员：
+                                <span class="x-red" id="welcome-admin">Admin</span>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">数据统计</div>
+                        <div class="layui-card-body" >
+                         <ul class="layui-row layui-col-space10 layui-this x-admin-carousel x-admin-backlog"
+                             id="data-statistics">
+                                <!--<li class="layui-col-md2 layui-col-xs6">
                                     <a href="javascript:;" class="x-admin-backlog-body">
                                         <h3>会员数</h3>
                                         <p>
@@ -65,7 +75,7 @@
                                         <p>
                                             <cite>6766</cite></p>
                                     </a>
-                                </li>
+                                </li>-->
                             </ul>
                         </div>
                     </div>
@@ -81,7 +91,7 @@
                                         <td>1.0.0</td></tr>
                                     <tr>
                                         <th>服务器地址</th>
-                                        <td>x.xuebingsi.com</td></tr>
+                                        <td>106.14.141.62</td></tr>
                                     <tr>
                                         <th>操作系统</th>
                                         <td>WINDOWS</td></tr>
@@ -122,6 +132,34 @@
                     <blockquote class="layui-elem-quote layui-quote-nm">感谢layui提供技术支持。</blockquote></div>
             </div>
         </div>
-        </div>
+        <script type="text/javascript" src="../../comm/comm.js"></script>
+        <script type="text/javascript" src="../../comm/jquery.js"></script>
+        <script>
+            layui.use('layer',function() {
+                $(document).ready(function () {
+                    $.post(domain + '/home/my-desktop-info', function (res) {
+                        if (res.code === 200) {
+                            document.getElementById("welcome-admin").innerText = window.sessionStorage.getItem('userName');
+                            let a = document.getElementById("data-statistics");
+                            let list = res.data.rows;
+                            for (let i =0;i<list.length;i++){
+                                let b = list[i];
+                                a.innerHTML+='<li class="layui-col-md2 layui-col-xs6 ">\n' +
+                                    '<a href="javascript:;" class="x-admin-backlog-body">\n' +
+                                    '<h3>'+b.name+'</h3>\n' +
+                                    '<p>\n' +
+                                    ' <cite>'+b.number+'</cite></p>\n' +
+                                    '</a>\n' +
+                                    '</li>'
+                            }
+                        } else {
+                            layer.msg(res.msg)
+                        }
+                    })
+                })
+            })
+
+
+        </script>
     </body>
 </html>

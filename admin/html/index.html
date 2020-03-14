@@ -26,32 +26,9 @@
             <div class="left_open">
                 <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
             </div>
-       <!--     <ul class="layui-nav left fast-add" lay-filter="">
-                <li class="layui-nav-item">
-                    <a href="javascript:;">+新增</a>
-                    <dl class="layui-nav-child">
-                        &lt;!&ndash; 二级菜单 &ndash;&gt;
-                        <dd>
-                            <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
-                                <i class="iconfont">&#xe6a2;</i>弹出最大化</a></dd>
-                        <dd>
-                            <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">
-                                <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a></dd>
-                        <dd>
-                            <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">
-                                <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a></dd>
-                        <dd>
-                            <a onclick="xadmin.add_tab('在tab打开','member-list.html')">
-                                <i class="iconfont">&#xe6b8;</i>在tab打开</a></dd>
-                        <dd>
-                            <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">
-                                <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a></dd>
-                    </dl>
-                </li>
-            </ul>-->
             <ul class="layui-nav right" lay-filter="">
                 <li class="layui-nav-item">
-                   <em id="time"></em>
+                    <em id="time"></em>
                 </li>
                 <li class="layui-nav-item">
                     <a href="javascript:;" id="admin-name">Admin</a>
@@ -60,9 +37,7 @@
                         <dd>
                             <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a></dd>
                         <dd>
-                            <a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-                        <dd>
-                            <a href="../login.html">退出</a></dd>
+                            <a href="#">退出</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -85,12 +60,12 @@
                                     <cite>商品列表</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('商品列表','cate.html')">
+                                <a onclick="xadmin.add_tab('商品入仓','cate.html')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品入仓</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('商品列表','cate.html')">
+                                <a onclick="xadmin.add_tab('商品出仓','cate.html')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品出仓</cite></a>
                             </li>
@@ -268,7 +243,7 @@
         <style id="theme_style"></style>
         <!-- 右侧主体结束 -->
         <!-- 中部结束 -->
-        <script type="text/javascript" src="../../comm/ajax.js"></script>
+        <script type="text/javascript" src="../../comm/comm.js"></script>
         <script type="text/javascript" src="../../comm/jquery.js"></script>
         <script>
             layui.use('layer',function() {
@@ -279,8 +254,10 @@
                                 offset: '20px'
                                 ,icon: 1
                             });
-                            let data = res.data;
-                            document.getElementById("admin-name").innerText= data.userName;
+                            let indexData = res.data;
+                            let userName = indexData.userName;
+                            window.sessionStorage.setItem('userName',userName)
+                            document.getElementById("admin-name").innerText= userName;
                         }else {
                             layer.msg(res.msg,{icon:5,offset: '20px'},function () {
                                 location.href='../login.html'
