@@ -22,7 +22,7 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-body ">
-                            <form class="layui-form layui-col-space5">
+                            <div class="layui-col-space5">
                                 <div class="layui-inline layui-show-xs-block">
                                     <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
                                 </div>
@@ -36,16 +36,16 @@
                                 </div>
                                 <span>或</span>
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="username"  placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                                    <input type="text" name="phone"  placeholder="请输入手机号" autocomplete="off" class="layui-input">
                                 </div>
                                 <span>或</span>
                                 <div class="layui-inline layui-show-xs-block">
-                                    <input type="text" name="username"  placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                                    <input type="text" name="mail"  placeholder="请输入邮箱" autocomplete="off" class="layui-input">
                                 </div>
-                                <div class="layui-inline layui-show-xs-block">
-                                    <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+                                <div class="layui-inline layui-show-xs-block" id="select-list">
+                                    <button class="layui-btn"><i class="layui-icon">&#xe615;</i></button>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                         <div class="layui-card-header">
                             <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
@@ -71,33 +71,6 @@
                                   </tr>
                                 </thead>
                                 <tbody id="tbody-list">
-                                  <!--<tr>
-                                    <td>
-                                      <input type="checkbox" name="id" value="1"   lay-skin="primary"> 
-                                    </td>
-                                    <td>1</td>
-                                    <td>小明</td>
-                                    <td><img class="headIcon" src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3002379740,3965499425&fm=26&gp=0.jpg"/></td>
-                                    <td>男</td>
-                                    <td>13000000000</td>
-                                    <td>北京市 海淀区</td>
-                                    <td class="td-status">
-                                      <span class="layui-btn layui-btn-normal layui-btn-mini">已启用</span></td>
-                                    <td class="td-manage">
-                                      <a onclick="member_stop(this,'10001')" href="javascript:;"  title="启用">
-                                        <i class="layui-icon">&#xe601;</i>
-                                      </a>
-                                      <a title="编辑"  onclick="xadmin.open('编辑','member-edit.html',600,400)" href="javascript:;">
-                                        <i class="layui-icon">&#xe642;</i>
-                                      </a>
-                                      <a onclick="xadmin.open('修改密码','member-password.html',600,400)" title="修改密码" href="javascript:;">
-                                        <i class="layui-icon">&#xe631;</i>
-                                      </a>
-                                      <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
-                                        <i class="layui-icon">&#xe640;</i>
-                                      </a>
-                                    </td>
-                                  </tr>-->
                                 </tbody>
                             </table>
                         </div>
@@ -121,111 +94,172 @@
     <script type="text/javascript" src="../../comm/comm.js"></script>
     <script type="text/javascript" src="../../comm/jquery.js"></script>
     <script>
-        let obj={
+      layui.use(['laydate','form'], function() {
+          var laydate = layui.laydate;
+          var form = layui.form;
+          // 监听全选
+          form.on('checkbox(checkall)', function (data) {
 
-        };
-      layui.use(['laydate','form'], function(){
-        var laydate = layui.laydate;
-        var  form = layui.form;
-        // 监听全选
-        form.on('checkbox(checkall)', function(data){
+              if (data.elem.checked) {
+                  $('tbody input').prop('checked', true);
+              } else {
+                  $('tbody input').prop('checked', false);
+              }
+              form.render('checkbox');
+          });
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#start' //指定元素
+          });
+          //执行一个laydate实例
+          laydate.render({
+              elem: '#end' //指定元素
+          });
+          let obj={
 
-          if(data.elem.checked){
-            $('tbody input').prop('checked',true);
-          }else{
-            $('tbody input').prop('checked',false);
-          }
-          form.render('checkbox');
-        });
-
-        //执行一个laydate实例
-        laydate.render({
-          elem: '#start' //指定元素
-        });
-        //执行一个laydate实例
-        laydate.render({
-          elem: '#end' //指定元素
-        });
-
-
-
+          };
           $(document).ready(function () {
+              setList()
+          });
+          $("#select-list").click(function () {
+              let start = document.getElementsByClassName("layui-input")[0].value;
+              let end = document.getElementsByClassName("layui-input")[1].value;
+              let username = document.getElementsByClassName("layui-input")[2].value;
+              let phone = document.getElementsByClassName("layui-input")[3].value;
+              let mail = document.getElementsByClassName("layui-input")[4].value;
+              if((start.length===0) && (end.length===0) && (username.length===0)
+                  && (phone.length===0) &&(mail.length===0)){
+                  layer.msg("请至少填写一项！",{offset: '60px'});
+                  return
+              }
+              if(a(start)){
+                  let a = dateToCurr(start)
+                  if(a>dateToCurr(end)){
+                      layer.msg("开始时间不能大于结束时间！",{offset: '60px'});
+                      return;
+                  }else {
+                      obj.startTime=a;
+                  }
+              }
+              if(a(end)){
+                  let a = dateToCurr(end);
+                  if(end===start){
+                      obj.endTime=a+86399;
+                  }else if(a<dateToCurr(start)){
+                      layer.msg("结束时间不能小于开始时间！",{offset: '60px'});
+                      return;
+                  }else {
+                      obj.endTime=a;
+                  }
+              }
+              if(a(username)){
+                  obj.username=username;
+              }
+              if(a(phone)){
+                  obj.phone=phone;
+              }
+              if(a(mail)){
+                  obj.mail=mail;
+              }
+              setList();
+              function a(v) {
+                if(v.length>0){
+                    return true;
+                }else {
+                    return false;
+                }
+              }
+          });
+          function setList() {
               $.post(domain+'/user-management/user-list',objToJson(obj), function (res) {
                   if(res.code === 200){
-                    let list = res.data.userout;
-                    for (let i=0;i<list.length;i++){
-                        let a = list[i];
-                        let status = a.status;
-                        let b,c;
-                        if(status===1){
-                            b="启用";
-                            c="未启用"
-                        }else {
-                            b="未启用";
-                            c="启用"
-                        }
-                        document.getElementById("tbody-list").innerHTML+=
-                            '<tr>\n' +
-                            '<td>\n' +
-                            '<input type="checkbox" name="id" value='+a.id+'  lay-skin="primary"> \n' +
-                            '</td>\n' +
-                            '<td>'+a.nick+'</td>\n' +
-                            '<td><img class="headIcon" src='+a.headIcon+'/></td>\n' +
-                            '<td>'+a.sex+'</td>\n' +
-                            '<td>'+a.mobile+'</td>\n' +
-                            '<td>'+a.address+'</td>\n' +
-                            '<td class="td-status">\n' +
-                            '<span class="layui-btn layui-btn-normal layui-btn-mini">'+b+'</span></td>\n' +
-                            '<td class="td-manage">\n' +
-                            '<a onclick="member_stop(this,\'10001\')" href="javascript:;"  title='+c+'>\n' +
-                            '<i class="layui-icon">&#xe601;</i>\n' +
-                            '</a>\n' +
-                            '<a title="编辑"  onclick="xadmin.open(\'编辑\',\'member-edit.html\',600,400)" href="javascript:;">\n' +
-                            '<i class="layui-icon">&#xe642;</i>\n' +
-                            '</a>\n' +
-                            '<a onclick="xadmin.open(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;">\n' +
-                            '<i class="layui-icon">&#xe631;</i>\n' +
-                            '</a>\n' +
-                            '<a title="删除" onclick="member_del(this,\'要删除的id\')" href="javascript:;">\n' +
-                            '<i class="layui-icon">&#xe640;</i>\n' +
-                            '</a>\n' +
-                            '</td>\n' +
-                            '</tr>'
-                    }
+                      let  tbodyList = document.getElementById("tbody-list");
+                      tbodyList.innerHTML = '';
+                      let list = res.data.userout;
+                      for (let i=0;i<list.length;i++){
+                          let a = list[i];
+                          let status = a.status;
+                          let b,c,d,e;
+                          if(status===1){
+                              b="已启用";
+                              c="停用";
+                              d="&#xe601;";
+                          }else {
+                              b="已停用";
+                              c="启用";
+                              d="&#xe62f;";
+                              e='layui-btn-disabled'
+                          }
+                          tbodyList.innerHTML+=
+                              '<tr>\n' +
+                              '<td><input type="checkbox" name="id" value=' +a.id+'  lay-skin="primary"></td>\n' +
+                              '<td>'+a.nick+'</td>\n' +
+                              '<td><img class="headIcon" src='+a.headIcon+' /></td>' +
+                              '<td>'+a.sex+'</td>\n' +
+                              '<td>'+a.mobile+'</td>\n' +
+                              '<td>'+a.address+'</td>\n' +
+                              '<td>'+a.regTime+'</td>\n' +
+                              '<td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-mini '+e+'">'+b+'</span></td>\n' +
+                              '<td class="td-manage">\n' +
+                              '<a onclick="member_stop(this,'+a.id+')" href="javascript:;"  title='+c+'>\n' +
+                              '<i class="layui-icon">'+d+'</i>\n' +
+                              '</a>\n' +
+                              '<a title="编辑"  onclick="xadmin.open(\'编辑\',\'member-edit.html\',600,400)" href="javascript:;">\n' +
+                              '<i class="layui-icon">&#xe642;</i>\n' +
+                              '</a>\n' +
+                              '<a onclick="xadmin.open(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;">\n' +
+                              '<i class="layui-icon">&#xe631;</i>\n' +
+                              '</a>\n' +
+                              '<a title="删除" onclick="member_del(this,\'要删除的id\')" href="javascript:;">\n' +
+                              '<i class="layui-icon">&#xe640;</i>\n' +
+                              '</a>\n' +
+                              '</td>\n' +
+                              '</tr>';
+
+                      }
                   }else {
                       layer.msg(res.msg)
                   }
-
-
               })
-          })
-
-
-
+          }
       });
 
        /*用户-停用*/
       function member_stop(obj,id){
-          layer.confirm('确认要停用吗？',function(index){
+             let req={
+                 userId : id
+              };
+          if($(obj).attr('title')==='停用'){
+              req.type = 0;
+              enableDisabled('确认要停用吗？','启用','&#xe62f;')
+          }
+          if($(obj).attr('title')==='启用'){
+              req.type = 1;
+              enableDisabled('确认要启用吗？','停用','&#xe601;')
+          }
 
-              if($(obj).attr('title')=='启用'){
+          function enableDisabled(tips,t,x){
+              layer.confirm(tips,function(){
+                  $.post(domain+'/user-management/enable-disabled',objToJson(req), function (res) {
+                      if(res.code ===200){
+                          let type =req.type;
+                          $(obj).attr('title',t);
+                          $(obj).find('i').html(x);
+                          if(type===1){
+                              layer.msg('已启用!',{icon: 1,time:1000});
+                              $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                          }
+                          if(type===0){
+                              layer.msg('已停用!',{icon:1,time:1000});
+                              $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                          }
 
-                //发异步把用户状态进行更改
-                $(obj).attr('title','停用')
-                $(obj).find('i').html('&#xe62f;');
-
-                $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
-                layer.msg('已停用!',{icon: 5,time:1000});
-
-              }else{
-                $(obj).attr('title','启用')
-                $(obj).find('i').html('&#xe601;');
-
-                $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
-                layer.msg('已启用!',{icon: 5,time:1000});
-              }
-              
-          });
+                      }else {
+                          layer.msg(res.msg)
+                      }
+                  });
+              })
+          }
       }
 
       /*用户-删除*/
