@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<script src="./comm/comm.js" charset="utf-8"></script>
+<script src="./comm/jquery.js" charset="utf-8"></script>
+<script src="./comm/jquery-1.9.1.min.js.js" charset="utf-8"></script>
+<head>
+    <meta charset="utf-8">
+    <title>HTML注册登录页面模板</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<div class="content">
+    <div class="form sign-in">
+        <h2>欢迎回来</h2>
+            <label>
+                <span>账号</span>
+                <input type="username" id="username" name="username"/>
+            </label>
+            <label>
+                <span>密码</span>
+                <input type="password" id="password" name="password"/>
+            </label>
+        <!--<p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>-->
+        <button type="button" class="submit" onclick="loginSubmit()">登 录</button>
+    </div>
+    <div class="sub-cont">
+        <div class="img">
+            <div class="img__text m--up">
+                <h2>还未注册？</h2>
+                <p>立即注册，发现大量机会！</p>
+            </div>
+            <div class="img__text m--in">
+                <h2>已有帐号？</h2>
+                <p>有帐号就登录吧，好久不见了！</p>
+            </div>
+            <div class="img__btn">
+                <span class="m--up">注 册</span>
+                <span class="m--in">登 录</span>
+            </div>
+        </div>
+        <div class="form sign-up">
+            <h2>立即注册</h2>
+            <label>
+                <span>手机号</span>
+                <input type="text" id="moblie" name="moblie"/>
+            </label>
+            <label>
+                <span>邮箱</span>
+                <input type="email" id="email" name="email"/>
+            </label>
+            <label>
+                <span>密码</span>
+                <input type="password" id="pwd" name="pwd" />
+            </label>
+            <button type="button" class="submit" onclick="register()">注 册</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+<!-- <div class="layui-trans layadmin-user-login-footer">
+     <p>© 2020 <a href="http://www.baidu.com/" target="_blank">商城仓储版权所有</a></p>
+ </div>-->
+
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script>
+    function loginSubmit() {
+        var username = document.getElementById("username").value;    // 获取id为username的<input>框数据
+        var password = document.getElementById("password").value;   // 获取id为password的<input>框数据
+        // 判断
+        if (username.length == 0) {
+            alert("请输入用户名");
+            return;
+        }
+        if (password.length == 0) {
+           alert("请输入密码");
+            return;
+        }
+        let obj = {
+            userName : username,
+            password : password,
+            ip : returnCitySN["cip"],
+            role : 1
+        };
+        // Ajax提交数据
+        $.ajax({
+            contentType: "application/json",
+            url: domain+"/user/login",    // 提交到controller的url路径
+            type: "post",    // 提交方式
+            data: objToJson(obj),  // data为String类型，必须为 Key/Value 格式。
+            dataType: "json",    // 服务器端返回的数据类型
+            success: function (data) {    // 请求成功后的回调函数，其中的参数data为controller返回的map,也就是说,@ResponseBody将返回的map转化为JSON格式的数据，然后通过data这个参数取JSON数据中的值
+                if (data.code === 200) {
+                    //跳转到系统首页
+                    alert("成功");
+                    location.href='./admin/html/index.html';
+                }else{
+                    alert(data.msg);
+                }
+            },
+        });
+    };
+
+    //电话号码验证
+    function isnum(moblie){
+        var reg=/^1[0-9]{10}/;
+        if(!reg.test(moblie.value)){
+            alert("请正确填写手机号！");
+            moblie.value="";
+        }
+    };
+
+    //验证邮件格式
+    function ismail(email){
+        var reg=/[a-zA-Z0-9]{1,10}@[a-zA-Z0-9]{1,5}\.[a-zA-Z0-9]{1,5}/;
+        if(!reg.test(email.value)){
+            alert("请正确填写邮箱！");
+            email.value="";
+        }
+    };
+
+    function register() {
+        var moblie = document.getElementById("moblie").value;
+        var email = document.getElementById("email").value; // 获取id为username的<input>框数据
+        var pwd = document.getElementById("pwd").value;   // 获取id为password的<input>框数据
+        // 判断
+        if (moblie.length === 0) {
+            alert("请输入手机号");
+            return;
+        }
+        if (email.length === 0) {
+            alert("请输入邮箱");
+            return;
+        }
+        if (pwd.length === 0) {
+            alert("请输入密码");
+            return;
+        }
+        isnum(moblie);
+        ismail(email);
+
+        let obj = {
+            moblie : moblie,
+            email:email,
+            passWord : pwd,
+            //ip : returnCitySN["cip"],
+            role : 1
+        };
+        $.ajax({
+            contentType: "application/json",
+            url: domain+"/register/userRegister",    // 提交到controller的url路径
+            type: "post",    // 提交方式
+            data: objToJson(obj),  // data为String类型，必须为 Key/Value 格式。
+            dataType: "json",    // 服务器端返回的数据类型
+            success: function (data) {    // 请求成功后的回调函数，其中的参数data为controller返回的map,也就是说,@ResponseBody将返回的map转化为JSON格式的数据，然后通过data这个参数取JSON数据中的值
+                if (data.code === 200) {
+                    //跳转到系统首页
+                    alert("注册成功!");
+                    location.href='./admin/html/index.html';
+                }else{
+                    alert(data.msg);
+                }
+            },
+        });
+    };
+
+</script>
+
+</body>
+
+</html>
