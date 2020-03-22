@@ -256,7 +256,7 @@
                             });
                             let indexData = res.data;
                             let userName = indexData.userName;
-                            window.sessionStorage.setItem('userName',userName)
+                            window.sessionStorage.setItem('userName',userName);
                             document.getElementById("admin-name").innerText= userName;
                         }else {
                             layer.msg(res.msg,{icon:5,offset: '20px'},function () {

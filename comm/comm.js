@@ -10,3 +10,11 @@ function objToJson(Obj) {
 function dateToCurr(date) {
     return new Date(date+' 00:00:00:000').getTime()/1000
 }
+
+function check(v) {
+    if(v.length>0){
+        return true;
+    }else {
+        return false;
+    }
+}

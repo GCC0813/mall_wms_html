@@ -91,7 +91,7 @@
 	        area: [w+'px', h +'px'],
 	        fix: false, //不固定
 	        maxmin: true,
-	        shadeClose: true,
+	        shadeClose: false,
 	        shade:0.4,
 	        title: title,
 	        content: url
@@ -99,7 +99,7 @@
 	    if(full){
 	       layer.full(index); 
 	    }
-	}
+	};
 	/**
 	 * [close 关闭弹出层]
 	 * @return {[type]} [description]
@@ -216,7 +216,6 @@ layui.use(['layer','element','jquery'],function() {
     setInterval(function () {
         $('#time').html(currentTime)
     }, 1000);
-
 
     // 打开页面初始
     xadmin.init();
@@ -348,7 +347,6 @@ layui.use(['layer','element','jquery'],function() {
         $('#tab_right').hide();
         $('#tab_show').hide();
     });
-
     // 页面加载完要做的
     xadmin.end();
 })
