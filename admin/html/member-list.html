@@ -187,61 +187,60 @@
           });
           function setList() {
               $.post(domain+'/user-management/user-list',objToJson(obj), function (res) {
-                  if(res.code === 200){
-                      let list = res.data.userout;
-                      if(list.length < 1 || res.data.userCount===0){
-                          ccc = res.data.userCount;
-                          layer.msg('没有更多数据了◑﹏◐',{offset: '60px'});
-                      }else {
-                          let  tbodyList = document.getElementById("tbody-list");
-                          tbodyList.innerHTML = '';
-                          for (let i=0;i<list.length;i++){
-                              let a = list[i];
-                              let status = a.status;
-                              let b,c,d,e;
-                              if(status===1){
-                                  b="已启用";
-                                  c="停用";
-                                  d="&#xe601;";
-                              }else {
-                                  b="已停用";
-                                  c="启用";
-                                  d="&#xe62f;";
-                                  e='layui-btn-disabled'
+                      if(res.code === 200){
+                          let list = res.data.userout;
+                          if(list.length < 1 || res.data.userCount===0){
+                              ccc = res.data.userCount;
+                              layer.msg('没有更多数据了◑﹏◐',{offset: '60px'});
+                          }else {
+                              let  tbodyList = document.getElementById("tbody-list");
+                              tbodyList.innerHTML = '';
+                              for (let i=0;i<list.length;i++){
+                                  let a = list[i];
+                                  let status = a.status;
+                                  let b,c,d,e;
+                                  if(status===1){
+                                      b="已启用";
+                                      c="停用";
+                                      d="&#xe601;";
+                                  }else {
+                                      b="已停用";
+                                      c="启用";
+                                      d="&#xe62f;";
+                                      e='layui-btn-disabled'
+                                  }
+                                  tbodyList.innerHTML+=
+                                      '<tr>\n' +
+                                      '<td>'+a.id+'</td>\n' +
+                                      '<td>'+a.nick+'</td>\n' +
+                                      '<td><img class="headIcon" src='+a.headIcon+' /></td>' +
+                                      '<td>'+a.sex+'</td>\n' +
+                                      '<td>'+a.mobile+'</td>\n' +
+                                      '<td>'+a.address+'</td>\n' +
+                                      '<td>'+a.regTime+'</td>\n' +
+                                      '<td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-mini '+e+'">'+b+'</span></td>\n' +
+                                      '<td class="td-manage">\n' +
+                                      '<a onclick="member_stop(this,'+a.id+')" href="javascript:;"  title='+c+'>\n' +
+                                      '<i class="layui-icon">'+d+'</i>\n' +
+                                      '</a>\n' +
+                                      '<a title="编辑" onclick="edit_user_info('+ a.id +');xadmin.open(\'编辑\',\'member-edit.html\',500,550)" href="javascript:;">\n' +
+                                      '<i class="layui-icon">&#xe642;</i>\n' +
+                                      '</a>\n' +
+                                      '<a onclick="xadmin.open(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;">\n' +
+                                      '<i class="layui-icon">&#xe631;</i>\n' +
+                                      '</a>\n' +
+                                      '<a title="删除" onclick="member_del(this,'+a.id+')" href="javascript:;">\n' +
+                                      '<i class="layui-icon">&#xe640;</i>\n' +
+                                      '</a>\n' +
+                                      '</td>\n' +
+                                      '</tr>';
                               }
-                              tbodyList.innerHTML+=
-                                  '<tr>\n' +
-                                  '<td>'+a.id+'</td>\n' +
-                                  '<td>'+a.nick+'</td>\n' +
-                                  '<td><img class="headIcon" src='+a.headIcon+' /></td>' +
-                                  '<td>'+a.sex+'</td>\n' +
-                                  '<td>'+a.mobile+'</td>\n' +
-                                  '<td>'+a.address+'</td>\n' +
-                                  '<td>'+a.regTime+'</td>\n' +
-                                  '<td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-mini '+e+'">'+b+'</span></td>\n' +
-                                  '<td class="td-manage">\n' +
-                                  '<a onclick="member_stop(this,'+a.id+')" href="javascript:;"  title='+c+'>\n' +
-                                  '<i class="layui-icon">'+d+'</i>\n' +
-                                  '</a>\n' +
-                                  '<a title="编辑"  onclick="edit_user_info('+a.id+');xadmin.open(\'编辑\',\'member-edit.html\',500,550)" href="javascript:;">\n' +
-                                  '<i class="layui-icon">&#xe642;</i>\n' +
-                                  '</a>\n' +
-                                  '<a onclick="xadmin.open(\'修改密码\',\'member-password.html\',600,400)" title="修改密码" href="javascript:;">\n' +
-                                  '<i class="layui-icon">&#xe631;</i>\n' +
-                                  '</a>\n' +
-                                  '<a title="删除" onclick="member_del(this,'+a.id+')" href="javascript:;">\n' +
-                                  '<i class="layui-icon">&#xe640;</i>\n' +
-                                  '</a>\n' +
-                                  '</td>\n' +
-                                  '</tr>';
                           }
+                      }else {
+                          layer.msg(res.msg)
                       }
-                  }else {
-                      layer.msg(res.msg)
-                  }
               })
           }
-
       });
 
        /*用户-停用*/
