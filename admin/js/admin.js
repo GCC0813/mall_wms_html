@@ -249,7 +249,7 @@ layui.use(['layer','element','jquery'],function() {
         if($('.left-nav').css('width')=='60px'){
           $('.left-nav').animate({width: '220px'}, 100);
           $('.page-content').animate({left: '220px'}, 100);
-          $('.left-nav i').css('font-size','14px');
+          $('.left-nav i').css('fonts-size','14px');
           $('.left-nav cite,.left-nav .nav_right').show();
         }
 
@@ -291,7 +291,7 @@ layui.use(['layer','element','jquery'],function() {
     $('.container .left_open i').click(function(event) {
         if($('.left-nav').css('width')=='220px'){
             $('.left-nav .open').click();
-            $('.left-nav i').css('font-size','18px');
+            $('.left-nav i').css('fonts-size','18px');
             $('.left-nav').animate({width: '60px'}, 100);
             $('.left-nav cite,.left-nav .nav_right').hide();
             $('.page-content').animate({left: '60px'}, 100);
@@ -299,7 +299,7 @@ layui.use(['layer','element','jquery'],function() {
         }else{
             $('.left-nav').animate({width: '220px'}, 100);
             $('.page-content').animate({left: '220px'}, 100);
-            $('.left-nav i').css('font-size','14px');
+            $('.left-nav i').css('fonts-size','14px');
             $('.left-nav cite,.left-nav .nav_right').show();
             if($(window).width()<768){
                 $('.page-content-bg').show();
@@ -310,7 +310,7 @@ layui.use(['layer','element','jquery'],function() {
 
     $('.page-content-bg').click(function(event) {
         $('.left-nav .open').click();
-        $('.left-nav i').css('font-size','18px');
+        $('.left-nav i').css('fonts-size','18px');
         $('.left-nav').animate({width: '60px'}, 100);
         $('.left-nav cite,.left-nav .nav_right').hide();
         $('.page-content').animate({left: '60px'}, 100);

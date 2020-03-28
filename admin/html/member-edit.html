@@ -90,7 +90,7 @@
                 let province =document.getElementsByClassName("layui-input")[5];
                 let city =document.getElementsByClassName("layui-input")[6];
                 let district =document.getElementsByClassName("layui-input")[7];
-                let headIcon;
+                let headIcon="";
                 $(document).ready(function () {
                     let obj={
                         id:userId
@@ -98,50 +98,127 @@
                     $.post(domain+'/user/get-user-info-by-id',objToJson(obj), function (res) {
                         if(res.code === 200){
                             let data = res.data;
-                            nick.setAttribute("placeholder",data.nick);
-                            mail.setAttribute("placeholder",data.mail);
-                            phone.setAttribute("placeholder",data.mobile);
-                            sex.setAttribute("placeholder", data.sex===0?"男":data.sex===1?"女":"未知");
-                            age.setAttribute("placeholder",data.age);
-                            province.setAttribute("placeholder",data.province);
-                            city.setAttribute("placeholder", data.city);
-                            district.setAttribute("placeholder",data.district);
-                            $('#upload-ok-img').attr("src", data.headIcon);
+                            nick.setAttribute("placeholder",data.nick!=null?data.nick:"");
+                            mail.setAttribute("placeholder",data.mail!=null?data.mail:"");
+                            phone.setAttribute("placeholder",data.mobile!=null?data.mobile:"");
+                            sex.setAttribute("placeholder", data.sex!=null?data.sex===0?"男":data.sex===1?"女":"未知":"未知");
+                            age.setAttribute("placeholder",data.age!=null?data.age:"");
+                            province.setAttribute("placeholder",data.province!=null?data.province:"");
+                            city.setAttribute("placeholder", data.city!=null?data.city:"");
+                            district.setAttribute("placeholder",data.district!=null?data.district:"");
+                            $('#upload-ok-img').attr("src", data.headIcon!=null?data.headIcon:"http://static.gcc666.top/default_head.jpg");
                         }else {
                             layer.msg(res.msg)
                         }
                     });
                 });
+                $('#L_phone').blur(function(){
+                    if (check(phone.value)) {
+                        let obj = {
+                            mobile: phone.value
+                        };
+                        checkExistence(obj, '#L_phone')
+                    }
+                });
+                $('#L_email').blur(function(){
+                    if(check(mail.value)){
+                        let obj ={
+                            email : mail.value
+                        };
+                        checkExistence(obj,'#L_email')
+                    }
+                });
 
-
-
+                function checkExistence(obj,id){
+                    obj.id = userId;
+                    $.post(domain+'/user/is-has-user',objToJson(obj), function (res) {
+                        if(res.code===306) {
+                            layer.alert(res.msg, {icon: 2});
+                            $(id).focus().val('');
+                            return false;
+                        }
+                    })
+                }
                 $("#confirm-revision").click(function () {
                     let obj={id:userId},nickVal=nick.value,mailVal=mail.value,
                         phoneVal=phone.value,sexVal=sex.value,ageVal=age.value,
                         provinceVal=province.value,cityVal=city.value,
                         districtVal=district.value;
                     if(!check(nickVal) && !check(mailVal) && !check(phoneVal) && !check(sexVal) &&
-                        !check(ageVal) && !check(provinceVal) && !check(cityVal) && !check(districtVal)){
+                        !check(ageVal) && !check(provinceVal) && !check(cityVal) && !check(districtVal)
+                        && !check(headIcon)){
                         layer.msg("至少填写一项！",{icon:2,offset: '60px'});
                         return;
                     }
-                    if(!check(nickVal)){
+                    if(check(nickVal)){
                         if(nickVal.length>30){
                             layer.msg("昵称不能超过30个字符！",{icon:2,offset: '60px'});
                             return;
                         }
                         obj.nick=nickVal;
                     }
-                   /* if(!check(mail)){
-                        if()
 
-                    }*/
+                   if(check(mailVal)){
+                        if(!/^[0-9A-Za-z][\.-_0-9A-Za-z]*@[0-9A-Za-z]+(?:\.[0-9A-Za-z]+)+$/.test(mailVal)){
+                            layer.msg("请输入正确的邮箱！",{icon:2,offset: '60px'});
+                            return;
+                        }
+                        obj.mail=mailVal
+                    }
 
-
+                   if(check(phoneVal)){
+                       if(!/^[1][3,4,5,7,8][0-9]{9}$/.test(phoneVal)){
+                           layer.msg("请输入正确的手机号！",{icon:2,offset: '60px'});
+                           return;
+                       }
+                       obj.mobile=phoneVal;
+                   }
+                   if(check(sexVal)){
+                       if(sexVal.length>1){
+                           layer.msg("性别不能超过1个字符！",{icon:2,offset: '60px'});
+                           return;
+                       }
+                       obj.sex=sexVal==="男"?0:sexVal==="女"?1:2;
+                   }
+                    if(check(ageVal)){
+                        if(ageVal.length>3){
+                            layer.msg("年龄不能超过3个字符！",{icon:2,offset: '60px'});
+                            return;
+                        }
+                        obj.age=ageVal;
+                    }
+                    if(check(provinceVal)){
+                        if(provinceVal.length>5){
+                            layer.msg("省份不能超过5个字符！",{icon:2,offset: '60px'});
+                            return;
+                        }
+                        obj.province=provinceVal;
+                    }
+                    if(check(cityVal)){
+                        if(cityVal.length>5){
+                            layer.msg("市不能超过5个字符！",{icon:2,offset: '60px'});
+                            return;
+                        }
+                        obj.city=cityVal;
+                    }
+                    if(check(districtVal)){
+                        if(districtVal.length>5){
+                            layer.msg("区不能超过5个字符！",{icon:2,offset: '60px'});
+                            return;
+                        }
+                        obj.district=districtVal;
+                    }
+                    if(check(headIcon)){
+                        obj.headIcon = headIcon;
+                    }
+                    $.post(domain+'/user/updateUserInfo',objToJson(obj), function (res) {
+                        if (res.code === 200) {
+                            layer.msg("修改成功！")
+                        }else {
+                            layer.msg(res.msg)
+                        }
+                    })
                 });
-
-
-
                 Qiniu.uploader({
                     runtimes: 'html5,flash,html4',      // 上传模式，依次退化
                     browse_button: 'upload-image',         // 上传选择的点选按钮，必需
