@@ -390,9 +390,9 @@ body
 .left_Treeview{ position:relative; float:left}
 .page_right_style{ float:right; position:absolute; height:100%;}
 .page_right_style.Widescreen{ left:0px}
-.show_btn {display: none;position: fixed;z-index: 1111;top:50%}
+.show_btn {display: block;position: fixed;z-index: 1111;top:50%}
 .show_btn span {
-	background: url(../images/indexhead_sprite.png) -46px -30px no-repeat;
+	background: url(../../images/indexhead_sprite.png) -46px -30px no-repeat;
 	width: 25px;
 	height: 100px;
 	overflow: hidden;
@@ -402,7 +402,7 @@ body
 	left: 0px;
 }
 .side_title span {
-	background: url(../images/indexhead_sprite.png) -14px -30px no-repeat;
+	background: url(../../images/indexhead_sprite.png) -14px -30px no-repeat;
 	width: 25px;
 	height: 40px;
 	overflow: hidden;

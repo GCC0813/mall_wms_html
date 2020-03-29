@@ -5,10 +5,10 @@
 // Url: 
 // Data : 2012-03-30
 //
-// 参数 : float --> 悬浮方向[left or right]
-//		  minStatue --> 最小状态，只有show_btn
-//		  skin      --> 皮肤控制
-//		  durationTime --> 完成时间
+// ???? : float --> ????????[left or right]
+//		  minStatue --> ??小???????show_btn
+//		  skin      --> ???????
+//		  durationTime --> ??????
 //
 // =================================================*/
 
@@ -39,7 +39,7 @@
         var options = $.extend(defaults, options);		
 
         this.each(function(){			
-            //获取对象
+            //???????
 			var thisBox = $(this),
 				closeBtn = thisBox.find(options.close_btn ),
 				showbtn = thisBox.find(options.show_btn ),
@@ -52,7 +52,7 @@
 				leftcss=thisBox.find(options.left_css),
 				rightcss=thisBox.find(options.right_css),
 				outer_height=thisBox.find(options.da_height);
-			var defaultTop = thisBox.offset().top;	//对象的默认top		
+			var defaultTop = thisBox.offset().top;
 			
 			
 					
@@ -61,7 +61,7 @@
 		    //var heights=widget_box.height($(widget_box).height()); 
 		   var showheight=sideList.height($(sideList).height()); 	
 			//sideList.height($(window).height()-(options.window_height));	
-			//当窗口发生改变是触发
+			//?????????????????
 			 $(window).resize(function(){				   	
 			    // outerheight.height($(window).height()-58+(options.window_height));
 			 });
@@ -70,11 +70,11 @@
 				sideContent.css('width', 0);			
 				showbtn.css('width', (options.close_btn_width));	
 			}
-			//皮肤控制
+			//???????
 			if(options.skin) thisBox.addClass('side_'+options.skin);
 				
 						
-			//核心scroll事件			
+			//????scroll???			
 			//$(window).bind("scroll",function(){
 //				var offsetTop = defaultTop + $(window).clientHeight()+ "px";
 //	            showbtn.animate({
@@ -82,10 +82,10 @@
 //	            },
 //	            {
 //	                duration: options.durationTime,	
-//	                queue: false    //此动画将不进入动画队列
+//	                queue: false    //???????????????????
 //	            });
 //			});	
-			//close事件
+			//close???
 			closeBtn.bind("click",function(){
 			   
 				sideContent.animate({width: '0px'},"fast").addClass('active');
@@ -102,7 +102,7 @@
 				
 				
 			});
-			//show事件
+			//show???
 			 showbtn.click(function() {
 	            $(this).animate({width: '0px',border:'1px solid #ddd'},"fast").css('display','none');
 	            sideContent.stop(true, true).delay(0).animate({ width:+(options.stylewidth)+'px'},"fast");
