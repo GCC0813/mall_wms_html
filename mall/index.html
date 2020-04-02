@@ -117,13 +117,14 @@
   <div class="Menu_style" id="allSortOuterbox">
    <div class="title_name"><em></em>所有商品分类</div>
 
-   <div class="content hd_allsort_out_box_new">
+   <div class="content hd_allsort_out_box_new" id="hd_allsort_out_box_new">
     <ul class="Menu_list">
       <li class="name">
 		<div class="Menu_name"><a href="#">茶品类</a> <span>&lt;</span></div>
 		<div class="link_name">
 		  <p>
-          <a href="#" id="tbody-list2"></a> |
+          <a href="#" id="tbody-list2">asdsa</a> |
+              <a href="#" >asdsa</a> |
           </p>
 		</div>
 		</li>
@@ -409,14 +410,27 @@
             },
         });
     };
-       /* $.post(domain+'/goods/goodsVariety',objToJson(obj), function (res) {
+        $.post(domain+'/goods/goodsVariety',objToJson(obj), function (res) {
             if(res.code === 200){
                 let list = res.data.goodVrietyOut;
                 if(list.length>1){
-                    let  tbodyList = document.getElementById("tbody-list");
+                    let  tbodyList = document.getElementById("hd_allsort_out_box_new");
                     tbodyList.innerHTML = '';
                     for (let i=0;i&lt;list.length;i++){
                         let a = list[i];
+                        let aa= '';
+                        let goodTags = a.goodTagsList;
+                        for(let j in goodTags){
+                            aa +='<a href="#">'+goodTags[j].tagName+'</a> |'
+                        }
+                        tbodyList.innerHTML += '<ul class="Menu_list">' +
+                            '<li class="name">' +
+                            '<div class="Menu_name"><a href="#">'+a.vrietyName+'</a> <span>&lt;</span></div>' +
+                            '<div class="link_name">' +
+                            '<p>'+ aa +'</p>' +
+                            '</div>' +
+                            '</li>' +
+                            '</ul>';
                         alert(a);
                     }
                 }else {
@@ -425,7 +439,7 @@
             }else {
                 layer.msg(res.msg)
             }
-        })*/
+        })
 
 
 </script>
