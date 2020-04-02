@@ -34,7 +34,7 @@ a:hover{ color:#F90}
 .l_f{ float:left}
 .mleft{ margin-left:10px;}
 .margin{ margin:15px;}
-.border{ border:1px solid #ddd; padding:5px; height:50px; line-height:36px; margin-bottom:20px; }
+.border{ padding:5px; height:50px; line-height:36px; margin-bottom:20px; }
 .border  span{ display:block; height:100%;}
 .table_menu_list{}
 .alert { margin-top:20px;}

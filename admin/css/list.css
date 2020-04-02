@@ -1,0 +1,22 @@
+.layui-form .headIcon{
+    height:30px;
+    width: 30px;
+    text-align:center
+}
+.layui-form th,tr{
+    text-align:center
+}
+
+
+
+
+.col-sm-6{
+    position: relative;
+    min-height: 1px;
+    padding-right: 12px;
+    padding-left: 12px;
+}
+.row:before, .row:after{
+    display: table;
+    content: " ";
+}
