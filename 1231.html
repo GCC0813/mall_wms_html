@@ -2,29 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>上传图片</title>
+    <title>Title</title>
 </head>
-<body>
-<link rel="stylesheet" href="css/messageBox.css">
 <link rel="stylesheet" href="lib/layui/css/layui.css">
-<div id = "container">
-<button id="upload-image" class="layui-btn">点我上传</button>
+<link rel="stylesheet" href="css/messageBox.css">
+<body>
+<!--<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>上传多张图片</legend>
+</fieldset>
+<div class="layui-upload" >
+    <button type="button" class="layui-btn" id="upload-image">多图片上传</button>
+    <blockquote id="container" class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+        预览图：
+        <div class="layui-upload-list" id="demo2"></div>
+    </blockquote>
+</div>-->
+<div id="upload-image">
+
+<div class="layui-upload-drag" id="container">
+    <i class="layui-icon"></i>
+    <p>点击上传，或将文件拖拽到此处</p>
+    <div class="layui-hide">
+        <img src="" alt="上传成功后渲染" style="max-width: 196px" >
+    </div>
 </div>
-<img id="upload-ok-img" style="width: auto;height: 400px">
-<div>
-    <h1 class="h"></h1>
-    <h1 class="h"></h1>
+
 </div>
+<script type="text/javascript" src="lib/layui/layui.all.js"></script>
 <script type="text/javascript" src="comm/jquery.js"></script>
 <script type="text/javascript" src="comm/qiniu.min.js"></script>
 <script type="text/javascript" src="comm/moxie.min.js"></script>
 <script type="text/javascript" src="comm/plupload.full.min.js"></script>
 <script type="text/javascript" src="comm/comm.js"></script>
 <script type="text/javascript" src="comm/message.js"></script>
+</body>
 <script>
     Qiniu.uploader({
         runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-        browse_button: 'upload-image',         // 上传选择的点选按钮，必需
+        browse_button: 'container',
+        //browser:'upload-image',
+        // 上传选择的点选按钮，必需
         // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
         // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
         // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
@@ -68,15 +85,15 @@
                 //    "key": "gogopher.jpg"
                 //  }
                 $.message({
-                    message: '上传成功！',
+                    message: '上传成功  !',
                     time: '1000',
                     type: 'success',
-                    autoClose: true
+                    autoClose: true,
+                    onClose:function () {
+                        let qiniuHeadKey = JSON.parse(info).key;
+                        $('#upload-image').append('<img style="height: 200px;width: auto;margin-left: 12px;border:solid 1px white;border-radius:30px" src="' + up.getOption('domain') + qiniuHeadKey + '" class="layui-upload-img">')
+                    }
                 });
-                let qiniuHeadKey = JSON.parse(info).key;
-                $('#upload-ok-img').attr("src", up.getOption('domain') + qiniuHeadKey)
-                document.getElementsByClassName('h')[0].innerText="域名："+up.getOption('domain');
-                document.getElementsByClassName('h')[1].innerText="后缀："+qiniuHeadKey;
 
 
             },
@@ -95,8 +112,27 @@
             }
         }
     });
-
+   /* layui.use('upload', function() {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        //多图片上传
+        upload.render({
+              elem: '#test2'
+            , url: 'http://localhost:10001/wms-api/upload/uploadFile' //改成您自己的上传接口
+            , multiple: true
+            , headers: {'Content-Type':'application/json'}
+            , accept: 'file'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo2').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">')
+                    document.getElementById("h").innerText=result
+                });
+            }
+            , done: function (res) {
+                //上传完毕
+            }
+        });
+    })*/
 </script>
-</body>
-
 </html>
