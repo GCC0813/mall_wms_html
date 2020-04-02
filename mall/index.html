@@ -5,8 +5,8 @@
 <link href="css/common.css" rel="stylesheet" type="text/css" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
-<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>
-<script src="js/common_js.js" type="text/javascript"></script>
+<!--<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>-->
+<!--<script src="js/common_js.js" type="text/javascript"></script>-->
 <script src="js/footer.js" type="text/javascript"></script>
 	<script src="js/vue.js" type="text/javascript"></script>
     <script src="../lib/layui/layui.js" charset="utf-8"></script>
@@ -83,7 +83,7 @@
 			<li><a href="Brands.html">联系我们</a></li>
 		 </ul>			 
 		</div>
-	<script>$("#Navigation").slide({titCell:".Navigation_name li",trigger:"click"});</script>
+	<!--<script>$("#Navigation").slide({titCell:".Navigation_name li",trigger:"click"});</script>-->
     </div>
 </head>
 <!--广告幻灯片样式-->
@@ -106,7 +106,7 @@
 
 		</div>
 		<script type="text/javascript">
-		jQuery(".slideBox").slide({titCell:".hd ul",mainCell:".bd ul",autoPlay:true,autoPage:true});
+		/*jQuery(".slideBox").slide({titCell:".hd ul",mainCell:".bd ul",autoPlay:true,autoPage:true});*/
 		</script>
  </div>
 
@@ -118,7 +118,7 @@
    <div class="title_name"><em></em>所有商品分类</div>
 
    <div class="content hd_allsort_out_box_new" id="hd_allsort_out_box_new">
-    <ul class="Menu_list">
+    <!--<ul class="Menu_list">
       <li class="name">
 		<div class="Menu_name"><a href="#">茶品类</a> <span>&lt;</span></div>
 		<div class="link_name">
@@ -128,10 +128,10 @@
           </p>
 		</div>
 		</li>
-    </ul>
+    </ul>-->
    </div>
   </div>
-  <script>$("#allSortOuterbox").slide({ titCell:".Menu_list li",mainCell:".menv_Detail",	});</script>
+  <!--<script>$("#allSortOuterbox").slide({ titCell:".Menu_list li",mainCell:".menv_Detail",	});</script>-->
   <!--产品栏切换-->
   <div class="product_list left">
   		<div class="slideGroup">
@@ -177,10 +177,10 @@
 			</div><!-- parBd End -->
 		</div>
         <script type="text/javascript">
-			/* 内层图片无缝滚动 */
+			/*/!* 内层图片无缝滚动 *!/
 			jQuery(".slideGroup .slideBoxs").slide({ mainCell:"ul",vis:4,prevCell:".sPrev",nextCell:".sNext",effect:"leftMarquee",interTime:50,autoPlay:true,trigger:"click"});
-			/* 外层tab切换 */
-			jQuery(".slideGroup").slide({titCell:".parHd li",mainCell:".parBd"});
+			/!* 外层tab切换 *!/
+			jQuery(".slideGroup").slide({titCell:".parHd li",mainCell:".parBd"});*/
 		</script>
         <!--广告样式-->
         <div class="Ads_style"><a href="#"><img src="images/AD_03.png"  width="318"/></a><a href="#"><img src="images/AD_04.png" width="318"/></a><a href="#"><img src="images/AD_06.png" width="318"/></a></div>
@@ -391,57 +391,33 @@
             setList();
         }
     });*/
+   $(document).ready(function () {
+       $.post(domain + '/goods/goodsVariety', function (res) {
+           if (res.code === 200) {
+               let list = res.data;
+                   let tbodyList = document.getElementById("hd_allsort_out_box_new");
+                   /*tbodyList.innerHTML = '';*/
+                   for (let i = 0; i <= list.length; i++) {
+                       let a = list[i];
+                       let aa = '';
+                       let goodTags = a.goodTagsList;
+                       for (let j in goodTags) {
+                           aa += '<a href="#">' + goodTags[j].tagName + '</a> |'
+                       }
+                       tbodyList.innerHTML += '<ul class="Menu_list">' +
+                           '<li class="name">' +
+                           '<div class="Menu_name"><a href="#">' + a.vrietyName + '</a> <span>&lt;</span></div>' +
+                           '<div class="link_name">' +
+                           '<p>' + aa + '</p>' +
+                           '</div>' +
+                           '</li>' +
+                           '</ul>';
+                   }
+           } else {
 
-    function setList() {
-        $.ajax({
-            contentType: "application/json",
-            url: domain + "/goods/goodsVariety",    // 提交到controller的url路径
-            type: "post",    // 提交方式
-            data: objToJson(obj),  // data为String类型，必须为 Key/Value 格式。
-            dataType: "json",    // 服务器端返回的数据类型
-            success: function (data) {    // 请求成功后的回调函数，其中的参数data为controller返回的map,也就是说,@ResponseBody将返回的map转化为JSON格式的数据，然后通过data这个参数取JSON数据中的值
-                if (data.code === 200) {
-                    //跳转到系统首页
-                    alert("成功");
-                    location.href = './admin/html/index.html';
-                } else {
-                    alert(data.msg);
-                }
-            },
-        });
-    };
-        $.post(domain+'/goods/goodsVariety',objToJson(obj), function (res) {
-            if(res.code === 200){
-                let list = res.data.goodVrietyOut;
-                if(list.length>1){
-                    let  tbodyList = document.getElementById("hd_allsort_out_box_new");
-                    tbodyList.innerHTML = '';
-                    for (let i=0;i&lt;list.length;i++){
-                        let a = list[i];
-                        let aa= '';
-                        let goodTags = a.goodTagsList;
-                        for(let j in goodTags){
-                            aa +='<a href="#">'+goodTags[j].tagName+'</a> |'
-                        }
-                        tbodyList.innerHTML += '<ul class="Menu_list">' +
-                            '<li class="name">' +
-                            '<div class="Menu_name"><a href="#">'+a.vrietyName+'</a> <span>&lt;</span></div>' +
-                            '<div class="link_name">' +
-                            '<p>'+ aa +'</p>' +
-                            '</div>' +
-                            '</li>' +
-                            '</ul>';
-                        alert(a);
-                    }
-                }else {
-                    layer.msg('没有更多数据了◑﹏◐',{offset: '60px'});
-                }
-            }else {
-                layer.msg(res.msg)
-            }
-        })
-
-
+           }
+       })
+   })
 </script>
 
 </html>
