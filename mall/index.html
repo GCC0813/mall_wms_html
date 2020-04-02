@@ -5,8 +5,8 @@
 <link href="css/common.css" rel="stylesheet" type="text/css" />
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
-<!--<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>-->
-<!--<script src="js/common_js.js" type="text/javascript"></script>-->
+<script src="js/jquery.SuperSlide.2.1.1.js" type="text/javascript"></script>
+<script src="js/common_js.js" type="text/javascript"></script>
 <script src="js/footer.js" type="text/javascript"></script>
    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js" type="text/javascript"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js" type="text/javascript"></script>
@@ -72,7 +72,7 @@
 	<div class="Navigation" id="Navigation">
 		 <ul class="Navigation_name">
 			<li><a href="Home.html">首页</a></li>
-			<li><a href="#">你身边的超市</a></li>
+			<li><a href="product_list.html">你身边的超市</a></li>
 			<li><a href="#">预售专区</a><em class="hot_icon"></em></li>
 			<li><a href="products_list.html">商城</a></li>
 
@@ -378,11 +378,11 @@
                    let aa = '';
                    let goodTags = a.goodTagsList;
                    for (let j in goodTags) {
-                       aa += '<a href="#">' + goodTags[j].tagName + '</a> |'
+                       aa += `<a href="product_list.html" onclick="goodTagIds(${goodTags[j].tagId})">${goodTags[j].tagName}</a> |`
                    }
                    tbodyList.innerHTML += '<ul class="Menu_list">' +
                        '<li class="name">' +
-                       '<div class="Menu_name"><a href="#">' + a.vrietyName + '</a> </div>' +
+                       '<div class="Menu_name"><a href="product_list.html" onclick="goodVrietysss(${a.vrietyId})">' + a.vrietyName + '</a> </div>' +
                        '<div class="link_name">' +
                        '<p>' + aa + '</p>' +
                        '</div>' +
@@ -392,6 +392,14 @@
            }
        })
    });
+   function goodVrietysss(id){
+       alert(id);
+   };
+
+   function goodTagIds(id) {
+       alert(id);
+   };
+
 
 
 </script>
