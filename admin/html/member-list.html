@@ -90,7 +90,8 @@
     <script type="text/javascript" src="../../comm/jquery.js"></script>
     <script>
       layui.use(['laydate','layer'], function() {
-          var laydate = layui.laydate;
+          let laydate = layui.laydate;
+          let loadindex=layer.load(2);
           //执行一个laydate实例
           laydate.render({
               elem: '#start' //指定元素
@@ -187,6 +188,9 @@
           });
           function setList() {
               $.post(domain+'/user-management/user-list',objToJson(obj), function (res) {
+                      $(function(res){
+                          layer.close(loadindex);
+                      });
                       if(res.code === 200){
                           let list = res.data.userout;
                           if(list.length < 1 || res.data.userCount===0){

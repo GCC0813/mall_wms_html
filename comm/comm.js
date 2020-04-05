@@ -18,3 +18,7 @@ function check(v) {
         return false;
     }
 }
+
+function popupMsg(a) {
+    layer.msg(a)
+}

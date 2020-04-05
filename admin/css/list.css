@@ -6,10 +6,9 @@
 .layui-form th,tr{
     text-align:center
 }
-
-
-
-
+a{
+    text-decoration:none !important;
+}
 .col-sm-6{
     position: relative;
     min-height: 1px;
@@ -19,4 +18,30 @@
 .row:before, .row:after{
     display: table;
     content: " ";
+}
+
+.dataTable th[class*=sorting_] {
+    color: black !important;
+}
+.dataTable th.sorting_desc:after {
+    color: #009688 !important; ;
+}
+.dataTable th.sorting_desc, .dataTable th.sorting_asc{
+    background-image: linear-gradient(to bottom,#e5e5e5 0,#D2D2D2 100%)!important;
+}
+.layui-table{
+    color: black!important;
+}
+
+.layui-inline select{
+    width: 100%;
+    height: 30px;
+    border-width:1px;
+    border-style:solid
+}
+.layui-inline select:hover{
+    border-color:#D2D2D2!important
+}
+#goods-status span{
+    width: auto;
 }

@@ -9,19 +9,20 @@
     <link rel="stylesheet" href="../css/font.css">
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/list.css">
-    <script src="../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../lib/layui/layui.js"></script>
     <script type="text/javascript" src="../js/admin.js"></script>
+    <script type="text/javascript" src="../js/goods.js"></script>
 
     <!------------------------------>
-    <link rel="stylesheet" href="../../lib/css/ace.min.css" />
-    <link href="../../lib/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../../lib/css/font-awesome.min.css" />
+
+    <!--<link rel="stylesheet" href="../../lib/css/ace.min.css" />-->
+   <!-- <link href="../../lib/css/bootstrap.min.css" rel="stylesheet" />-->
+    <!--<link rel="stylesheet" href="../../lib/css/font-awesome.min.css" />-->
     <!--<link href="../../lib/css/bootstrap.min.css" rel="stylesheet" />-->
     <script type="text/javascript" src="../../comm/jquery.js"></script>
+   <!-- <script src="../../lib/js/bootstrap.min.js"></script>
     <script src="../../lib/js/jquery.dataTables.min.js"></script>
-    <script src="../../lib/js/jquery.dataTables.bootstrap.js"></script>
-    <script type="text/javascript" src="../js/goods.js"></script>
-    <script type="text/javascript" src="../js/AllSchool.js"></script>
+    <script src="../../lib/js/jquery.dataTables.bootstrap.js"></script>-->
 
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -44,15 +45,19 @@
                         </div>
                         <span>或</span>
                         <div class="layui-inline layui-show-xs-block">
-                            <input type="" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                            <input type="" name="goodsname"  placeholder="请输入商品名" autocomplete="off" class="layui-input">
                         </div>
-                        <span>或</span>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="" name="phone"  placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                        <span>分类:</span>
+                        <div class="layui-inline layui-show-xs-block layui-form-select">
+                            <select id="cate-select-one">
+                                <option value="0">请选择商品类别</option>
+                            </select>
                         </div>
-                        <span>或</span>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="" name="mail"  placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+                        <span>标签:</span>
+                        <div class="layui-inline layui-show-xs-block layui-form-select" >
+                            <select id="tag-select-two" >
+                                <option value="0">请选择商品标签</option>
+                            </select>
                         </div>
                         <div class="layui-inline layui-show-xs-block">
                             <button class="layui-btn" id="select-list"><i class="layui-icon"  title="搜索">&#xe615;</i></button>
@@ -63,19 +68,19 @@
                 </div>
                 <div class="layui-card-header">
                     <!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./member-add.html',600,430)"><i class="layui-icon"></i>添加</button>
+                    <button class="layui-btn" onclick="xadmin.open('添加商品','./member-add.html',600,430)"><i class="layui-icon"></i>添加</button>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main table_menu_list">
                     <table class="layui-table layui-form " id="sample-table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>用户名</th>
-                            <th>头像</th>
-                            <th>性别</th>
-                            <th>手机</th>
-                            <th>地址</th>
-                            <th>注册时间</th>
+                            <th>商品编号</th>
+                            <th>商品名称</th>
+                            <th>商品主图</th>
+                            <th>商品价格</th>
+                            <th>商品分类</th>
+                            <th>商品标签</th>
+                            <th>入库时间</th>
                             <th>状态</th>
                             <th>操作</th>
                         </tr>
@@ -84,7 +89,9 @@
                         </tbody>
                     </table>
                 </div>
-            <!--    <div class="layui-card-body ">
+
+                <div id="test1"></div>
+              <!--  <div class="layui-card-body ">
                     <div class="page">
                         <div>
                             <a class="prev" id="last-page" href="#"><<</a>
@@ -99,53 +106,18 @@
 </div>
 </body>
 <script type="text/javascript" src="../../comm/comm.js"></script>
-
 <script>
-
-    jQuery(function($) {
-        $('#sample-table').dataTable( {
-            "aaSorting": [[ 0, "desc" ]],//默认第几个排序
-            "bStateSave": true,//状态保存
-            "aoColumnDefs": [
-               /* {"bVisible": false, "aTargets": [ 3 ]},*/ //控制列的隐藏显示
-                {"orderable":false,"aTargets":[0,1]}// 制定列不参与排序
-            ] } );
-        /*$('table th input:checkbox').on('click' , function(){
-            var that = this;
-            $(this).closest('table').find('tr > td:first-child input:checkbox')
-                .each(function(){
-                    this.checked = that.checked;
-                    $(this).closest('tr').toggleClass('selected');
-                });
-
-        });*/
-        $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-        function tooltip_placement(context, source) {
-            var $source = $(source);
-            var $parent = $source.closest('table');
-            var off1 = $parent.offset();
-            var w1 = $parent.width();
-
-            var off2 = $source.offset();
-            var w2 = $source.width();
-
-            if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
-            return 'left';
-        }
-    });
-
-
-
-
-
-
-
-
-
-
-
-    layui.use(['laydate','layer'], function() {
+     layui.use(['laydate','layer','laypage'], function() {
         var laydate = layui.laydate;
+        var laypage = layui.laypage;
+         //执行一个laypage实例
+         laypage.render({
+             elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+             ,count: 2 //数据总数，从服务端得到
+             ,limit:1
+             ,limits:[10,30,70,100]
+
+         });
         //执行一个laydate实例
         laydate.render({
             elem: '#start' //指定元素
@@ -157,78 +129,50 @@
 
 
 
+         let obj={
+         };
+       /*  $('#sample-table').dataTable( {
+             "aaSorting": [[ 0, "asc" ]],//默认第几个排序
+             "bStateSave": true,//状态保存
+             "aoColumnDefs": [
+                 /!* {"bVisible": false, "aTargets": [ 3 ]},*!/ //控制列的隐藏显示
+                 {"orderable":false,"aTargets":[0,2,4,5,7,8]}// 制定列不参与排序
+             ],
+             ajax: function (data, callback, settings) {
+
+             }
+         } );
+         $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+         function tooltip_placement(context, source) {
+             var $source = $(source);
+             var $parent = $source.closest('table');
+             var off1 = $parent.offset();
+             var w1 = $parent.width();
+             var off2 = $source.offset();
+             var w2 = $source.width();
+             if(parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
+                 return 'right';
+             return 'left';
+         }*/
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        let obj={
-
-        };
+        let loadindex=layer.load(2);
         $(document).ready(function () {
-            setList()
+            $.post(domain+'/goods/goodsVarietyAdmin', function (res) {
+                setList();
+                $(function(res){
+                    layer.close(loadindex);
+                });
+                if (res.code===200){
+                    set_goods_list_select(res.data.goodVrietyOut);
+                }else {
+                    $("#cate-select-one").html('<option value="0">请选择商品类别</option>');
+                    $("#tag-select-two").html('<option value="0">请选择商品标签</option>');
+                }
+            });
+
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         $("#select-list").click(function () {
             let start = document.getElementsByClassName("layui-input")[0].value;
@@ -311,93 +255,111 @@
             }
         });
         function setList() {
-            $.post(domain+'/user-management/user-list',objToJson(obj), function (res) {
+            $.post(domain+'/goods/goods-list',objToJson(obj), function (res) {
+                $(function(res){
+                    layer.close(loadindex);
+                });
+                let data = res.data;
                 if(res.code === 200){
-                    let list = res.data.userout;
-                    if(list.length < 1 || res.data.userCount===0){
-                        ccc = res.data.userCount;
+                    let goodsList = data.goodsOuts;
+                    if(goodsList.length < 1 || data.goodsCount===0){
                         layer.msg('没有更多数据了◑﹏◐',{offset: '60px'});
                     }else {
                         let  tbodyList = document.getElementById("tbody-list");
                         tbodyList.innerHTML = '';
-                        for (let i=0;i<list.length;i++){
-                            let a = list[i];
-                            let status = a.status;
-                            let b,c,d,e;
+                        for (let i in goodsList){
+                            let goods = goodsList[i];
+                            let status = goods.status;
+                            let checkStatus = goods.checkStatus;
+                            let a,b,c,d,e,f,g,h;
                             if(status===1){
-                                b="已启用";
-                                c="停用";
+                                a="已上架";
+                                c="下架";
                                 d="&#xe601;";
-                            }else {
-                                b="已停用";
-                                c="启用";
+                            }else if(status===2){
+                                a="已下架";
+                                c="上架";
                                 d="&#xe62f;";
                                 e='layui-btn-disabled'
                             }
+                            if(checkStatus===0){
+                                f="去审核";
+                                g="未审核";
+                                h='layui-btn-disabled'
+                            }else if(checkStatus===1){
+                                f="查看审核";
+                                g="已审核";
+                            }else if (checkStatus===2){
+                                f="重新审核";
+                                g="未过审";
+                                h='layui-btn-disabled'
+                            }
                             tbodyList.innerHTML+=
-                                '<tr>\n' +
-                                '<td>'+a.id+'</td>\n' +
-                                '<td>'+a.nick+'</td>\n' +
-                                '<td><img class="headIcon" src='+a.headIcon+' /></td>' +
-                                '<td>'+a.sex+'</td>\n' +
-                                '<td>'+a.mobile+'</td>\n' +
-                                '<td>'+a.address+'</td>\n' +
-                                '<td>'+a.regTime+'</td>\n' +
-                                '<td class="td-status"><span class="layui-btn layui-btn-normal layui-btn-mini '+e+'">'+b+'</span></td>\n' +
-                                '<td class="td-manage">\n' +
-                                '<a onclick="member_stop(this,'+a.id+')" href="javascript:;"  title='+c+'>\n' +
-                                '<i class="layui-icon">'+d+'</i>\n' +
-                                '</a>\n' +
-                                '<a title="编辑" onclick="edit_user_info('+ a.id +');xadmin.open(\'编辑\',\'member-edit.html\',500,450)" href="javascript:;">\n' +
-                                '<i class="layui-icon">&#xe642;</i>\n' +
-                                '</a>\n' +
-                                '<a onclick="edit_user_info('+ a.id +');xadmin.open(\'修改密码\',\'member-password.html\',500,270)" title="修改密码" href="javascript:;">\n' +
-                                '<i class="layui-icon">&#xe631;</i>\n' +
-                                '</a>\n' +
-                                '<a title="删除" onclick="member_del(this,'+a.id+')" href="javascript:;">\n' +
-                                '<i class="layui-icon">&#xe640;</i>\n' +
-                                '</a>\n' +
-                                '</td>\n' +
+                                '<tr>' +
+                                '<td>'+goods.id+'</td>' +
+                                '<td>'+goods.name+'</td>' +
+                                '<td><img class="headIcon" src='+goods.picUrls+' /></td>' +
+                                '<td>'+goods.marketPrice+'</td>' +
+                                '<td>'+goods.categoryName+'</td>' +
+                                '<td>'+goods.tagName+'</td>' +
+                                '<td>'+goods.createTime+'</td>' +
+                                '<td class="td-status" ><span id="goods-status" class="layui-btn layui-btn-normal layui-btn-mini '+e+'">'+a+'</span>' +
+                                '<span id="goods-check-status" class="layui-btn layui-btn-normal layui-btn-mini '+h+'">'+g+'</span></td>' +
+                                '<td class="td-manage">' +
+                                '<a onclick="goods_stop(this,'+goods.id+')" href="javascript:;"  title='+c+'>' +
+                                '<i class="layui-icon">'+d+'</i>' +
+                                '</a>' +
+                                '<a title="编辑" onclick="edit_user_info('+ goods.id +');xadmin.open(\'编辑\',\'member-edit.html\',500,450)" href="javascript:;">' +
+                                '<i class="layui-icon">&#xe642;</i>' +
+                                '</a>' +
+                                '<a onclick="edit_user_info('+ goods.id +');xadmin.open(\'修改密码\',\'member-password.html\',500,270)" title="修改密码" href="javascript:;">' +
+                                '<i class="layui-icon">&#xe631;</i>' +
+                                '</a>' +
+                                '<a title="删除" onclick="member_del(this,'+goods.id+')" href="javascript:;">' +
+                                '<i class="layui-icon">&#xe640;</i>' +
+                                '</a>' +
+                                '</td>' +
                                 '</tr>';
                         }
                     }
                 }else {
                     layer.msg(res.msg)
                 }
-            })
-        }
-    });
+            });
 
-    /*用户-停用*/
-    function member_stop(obj,id){
-        let req={
-            userId : id
-        };
-        if($(obj).attr('title')==='停用'){
-            req.type = 0;
-            enableDisabled('确认要停用吗？','启用','&#xe62f;')
         }
-        if($(obj).attr('title')==='启用'){
-            req.type = 1;
-            enableDisabled('确认要启用吗？','停用','&#xe601;')
+
+    });
+    /*商品-上架和下架*/
+    function goods_stop(obj,id){
+        let req={
+            goodsId : id,
+            type:1
+        };
+        if($(obj).attr('title')==='下架'){
+            req.status = 2;
+            enableDisabled('确认要下架吗？','上架','&#xe62f;')
+        }
+        if($(obj).attr('title')==='上架'){
+            req.status = 1;
+            enableDisabled('确认要上架吗？','下架','&#xe601;')
         }
 
         function enableDisabled(tips,t,x){
             layer.confirm(tips,function(){
-                $.post(domain+'/user-management/user-operation',objToJson(req), function (res) {
+                $.post(domain+'/goods/set-goods-status',objToJson(req), function (res) {
                     if(res.code ===200){
-                        let type =req.type;
+                        let type =req.status;
                         $(obj).attr('title',t);
                         $(obj).find('i').html(x);
                         if(type===1){
-                            layer.msg('已启用!',{icon: 1,time:1000});
-                            $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('已启用');
+                            layer.msg('已上架 !',{icon: 1,time:1000});
+                            $(obj).parents("tr").find(".td-status").find('#goods-status').removeClass('layui-btn-disabled').html('已上架');
                         }
-                        if(type===0){
-                            layer.msg('已停用!',{icon:1,time:1000});
-                            $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
+                        if(type===2){
+                            layer.msg('已下架 !',{icon:1,time:1000});
+                            $(obj).parents("tr").find(".td-status").find('#goods-status').addClass('layui-btn-disabled').html('已下架');
                         }
-
                     }else {
                         layer.msg(res.msg)
                     }
