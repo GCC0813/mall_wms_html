@@ -1,0 +1,21 @@
+.layui-upload-img{
+    margin-left: 10px;
+    height: 100px;
+    width: auto;
+    border:solid 1px white;
+    border-radius:15px;
+    cursor: pointer;
+   /*cursor: no-drop;*/
+}
+.to-examine input{
+    cursor: Default;
+}
+.to-examine textarea{
+    cursor: Default;
+}
+#status-checkBox div{
+    cursor: Default !important;
+}
+#status-checkBox button{
+    cursor: no-drop;
+}

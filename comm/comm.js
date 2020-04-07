@@ -22,3 +22,7 @@ function check(v) {
 function popupMsg(a) {
     layer.msg(a)
 }
+
+function setSessionID(id) {
+    window.sessionStorage.setItem('ID',id);
+}

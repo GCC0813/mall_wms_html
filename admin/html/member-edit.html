@@ -91,11 +91,15 @@
                 let city =document.getElementsByClassName("layui-input")[6];
                 let district =document.getElementsByClassName("layui-input")[7];
                 let headIcon="";
+                let loadIndex=layer.load(2);
                 $(document).ready(function () {
                     let obj={
                         id:userId
                     };
                     $.post(domain+'/user/get-user-info-by-id',objToJson(obj), function (res) {
+                        if(res){
+                            layer.close(loadIndex);
+                        }
                         if(res.code === 200){
                             let data = res.data;
                             nick.setAttribute("placeholder",data.nick!=null?data.nick:"");

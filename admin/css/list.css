@@ -45,3 +45,12 @@ a{
 #goods-status span{
     width: auto;
 }
+.layui-col-space5 select{
+    border-color: #e6e6e6 !important;
+}
+#td-manage .layui-icon{
+    font-size: 16px !important;
+}
+.td-status .layui-btn {
+    padding: 0 5px !important;
+}

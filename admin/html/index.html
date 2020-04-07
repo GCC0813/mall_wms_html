@@ -247,8 +247,12 @@
         <script type="text/javascript" src="../../comm/jquery.js"></script>
         <script>
             layui.use('layer',function() {
+                let loadIndex=layer.load(2);
                 $(document).ready(function () {
                     $.post(domain+'/home/get-home-info', function (res) {
+                        if(res){
+                            layer.close(loadIndex);
+                        }
                         if(res.code === 200){
                             layer.msg('欢迎来到商城仓储管理系统！', {
                                 offset: '20px'

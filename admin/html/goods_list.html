@@ -11,18 +11,7 @@
     <link rel="stylesheet" href="../css/list.css">
     <script type="text/javascript" src="../../lib/layui/layui.js"></script>
     <script type="text/javascript" src="../js/admin.js"></script>
-    <script type="text/javascript" src="../js/goods.js"></script>
-
-    <!------------------------------>
-
-    <!--<link rel="stylesheet" href="../../lib/css/ace.min.css" />-->
-   <!-- <link href="../../lib/css/bootstrap.min.css" rel="stylesheet" />-->
-    <!--<link rel="stylesheet" href="../../lib/css/font-awesome.min.css" />-->
-    <!--<link href="../../lib/css/bootstrap.min.css" rel="stylesheet" />-->
     <script type="text/javascript" src="../../comm/jquery.js"></script>
-   <!-- <script src="../../lib/js/bootstrap.min.js"></script>
-    <script src="../../lib/js/jquery.dataTables.min.js"></script>
-    <script src="../../lib/js/jquery.dataTables.bootstrap.js"></script>-->
 
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -34,7 +23,7 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-body ">
+                <div class="layui-card-body">
                     <div class="layui-col-space5">
                         <div class="layui-inline layui-show-xs-block">
                             <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
@@ -45,17 +34,17 @@
                         </div>
                         <span>或</span>
                         <div class="layui-inline layui-show-xs-block">
-                            <input type="" name="goodsname"  placeholder="请输入商品名" autocomplete="off" class="layui-input">
+                            <input type="text" name="goodsname"  placeholder="请输入商品名" autocomplete="off" class="layui-input">
                         </div>
                         <span>分类:</span>
                         <div class="layui-inline layui-show-xs-block layui-form-select">
-                            <select id="cate-select-one">
+                            <select id="cate-select-one" >
                                 <option value="0">请选择商品类别</option>
                             </select>
                         </div>
                         <span>标签:</span>
                         <div class="layui-inline layui-show-xs-block layui-form-select" >
-                            <select id="tag-select-two" >
+                            <select id="tag-select-two">
                                 <option value="0">请选择商品标签</option>
                             </select>
                         </div>
@@ -76,7 +65,7 @@
                         <tr>
                             <th>商品编号</th>
                             <th>商品名称</th>
-                            <th>商品主图</th>
+                            <th >商品主图</th>
                             <th>商品价格</th>
                             <th>商品分类</th>
                             <th>商品标签</th>
@@ -90,8 +79,8 @@
                     </table>
                 </div>
 
-                <div id="test1"></div>
-              <!--  <div class="layui-card-body ">
+                <div id="page"></div>
+              <!--  <div class="layui-card-body">
                     <div class="page">
                         <div>
                             <a class="prev" id="last-page" href="#"><<</a>
@@ -110,14 +99,7 @@
      layui.use(['laydate','layer','laypage'], function() {
         var laydate = layui.laydate;
         var laypage = layui.laypage;
-         //执行一个laypage实例
-         laypage.render({
-             elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
-             ,count: 2 //数据总数，从服务端得到
-             ,limit:1
-             ,limits:[10,30,70,100]
 
-         });
         //执行一个laydate实例
         laydate.render({
             elem: '#start' //指定元素
@@ -126,44 +108,10 @@
         laydate.render({
             elem: '#end' //指定元素
         });
-
-
-
-         let obj={
-         };
-       /*  $('#sample-table').dataTable( {
-             "aaSorting": [[ 0, "asc" ]],//默认第几个排序
-             "bStateSave": true,//状态保存
-             "aoColumnDefs": [
-                 /!* {"bVisible": false, "aTargets": [ 3 ]},*!/ //控制列的隐藏显示
-                 {"orderable":false,"aTargets":[0,2,4,5,7,8]}// 制定列不参与排序
-             ],
-             ajax: function (data, callback, settings) {
-
-             }
-         } );
-         $('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
-         function tooltip_placement(context, source) {
-             var $source = $(source);
-             var $parent = $source.closest('table');
-             var off1 = $parent.offset();
-             var w1 = $parent.width();
-             var off2 = $source.offset();
-             var w2 = $source.width();
-             if(parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2))
-                 return 'right';
-             return 'left';
-         }*/
-
-
-
-        let loadindex=layer.load(2);
+        let loadIndex=layer.load(2);
         $(document).ready(function () {
             $.post(domain+'/goods/goodsVarietyAdmin', function (res) {
-                setList();
-                $(function(res){
-                    layer.close(loadindex);
-                });
+                initLayPage();
                 if (res.code===200){
                     set_goods_list_select(res.data.goodVrietyOut);
                 }else {
@@ -177,28 +125,32 @@
         $("#select-list").click(function () {
             let start = document.getElementsByClassName("layui-input")[0].value;
             let end = document.getElementsByClassName("layui-input")[1].value;
-            let username = document.getElementsByClassName("layui-input")[2].value;
-            let phone = document.getElementsByClassName("layui-input")[3].value;
-            let mail = document.getElementsByClassName("layui-input")[4].value;
-            if((start.length===0) && (end.length===0) && (username.length===0)
-                && (phone.length===0) &&(mail.length===0)){
+            let goodsName = document.getElementsByClassName("layui-input")[2].value;
+            let goodsCate = $("#cate-select-one").val();
+            let goodsTag = $("#tag-select-two").val();
+            if((!check(start)) && (!check(end)) && (!check(goodsName))
+                && (parseInt(goodsCate)===0&&parseInt(goodsTag)===0)){
                 layer.msg("请至少填写一项！",{offset: '60px'});
                 return
             }
+            let obj={
+                currentPage: 1,
+                pageSize: 1
+            };
             if(start.length<1){
                 delete obj.startTime;
             }
             if(end.length<1){
                 delete obj.endTime;
             }
-            if(username.length<1){
-                delete obj.userName;
+            if(goodsName.length<1){
+                delete obj.vague;
             }
-            if(phone.length<1){
-                delete obj.phone;
+            if(parseInt(goodsCate)===0){
+                delete obj.categoryId;
             }
-            if(mail.length<1){
-                delete obj.mail;
+            if(parseInt(goodsTag)===0){
+                delete obj.tagId;
             }
             if(check(start)){
                 let a = dateToCurr(start);
@@ -220,113 +172,153 @@
                     obj.endTime=a;
                 }
             }
-            if(check(username)){
-                obj.userName=username;
+            if(check(goodsName)){
+                obj.vague=goodsName;
             }
-            if(check(phone)){
-                obj.phone=phone;
+            if(parseInt(goodsCate)>0){
+                obj.categoryId=goodsCate;
             }
-            if(check(mail)){
-                obj.mail=mail;
+            if(parseInt(goodsTag)>0){
+                obj.tagId=goodsTag;
             }
-            setList();
+            initLayPage(obj);
         });
-        $("#last-page").click(function () {
-            let current = $("#current");
-            let nowPage =parseInt(current.html()) ;
-            if(nowPage===1){
-                layer.msg('已经是第一页了◑﹏◐',{offset: '60px'});
-            }else {
-                let page = nowPage-1;
-                current.html(page);
-                obj.page=page;
-                setList();
+        function set_goods_list_select(goodVrietyList) {
+             let goodVriety = "";
+             let goodVrietySelectStr = '';
+             for (let i = 0, len = goodVrietyList.length; i < len; i++) {
+                 goodVriety = goodVrietyList[i];
+                 goodVrietySelectStr = goodVrietySelectStr + "<option value='" + goodVriety.vrietyId + "'>" + goodVriety.vrietyName + "</option>"
+             }
+             $("#cate-select-one").html(goodVrietySelectStr);
+
+             let selectGoodVriety = $("#cate-select-one").val();
+             let goodTagsList = goodVrietyList[selectGoodVriety].goodTagsList;
+             let goodTags = "";
+             let goodTagsSelectStr = "";
+             for (let i = 0; i < goodTagsList.length; i++) {
+                 goodTags = goodTagsList[i];
+                 goodTagsSelectStr = goodTagsSelectStr + "<option value='" + goodTags.tagId + "'>" + goodTags.tagName + "</option>"
+             }
+             $("#tag-select-two").html(goodTagsSelectStr);
+             $('#cate-select-one').change(function () {
+                 let selectGoodVriety = $("#cate-select-one").val();
+                 let goodTagsList = goodVrietyList[selectGoodVriety].goodTagsList;
+                 let goodTags = "";
+                 let goodTagsSelectStr = "";
+                 if (goodTagsList != null && goodTagsList.length>0) {
+                     for (let i = 0; i < goodTagsList.length; i++) {
+                         goodTags = goodTagsList[i];
+                         goodTagsSelectStr = goodTagsSelectStr + "<option value='" + goodTags.tagId + "'>" + goodTags.tagName + "</option>"
+                     }
+                 }
+                 $("#tag-select-two").html(goodTagsSelectStr);
+             });
+         }
+        function initLayPage(jsonReq) {
+            if (!jsonReq) {
+                jsonReq = {
+                    currentPage: 1,
+                    pageSize: 5
+                };
             }
-        });
-        let ccc = 0;
-        $("#next-page").click(function () {
-            let current = $("#current");
-            let nowPage = parseInt(current.html());
-            let page = nowPage+1;
-            obj.page=nowPage+1;
-            setList();
-            if(ccc>0){
-                current.html(page);
-            }
-        });
-        function setList() {
-            $.post(domain+'/goods/goods-list',objToJson(obj), function (res) {
-                $(function(res){
-                    layer.close(loadindex);
-                });
-                let data = res.data;
-                if(res.code === 200){
-                    let goodsList = data.goodsOuts;
-                    if(goodsList.length < 1 || data.goodsCount===0){
-                        layer.msg('没有更多数据了◑﹏◐',{offset: '60px'});
-                    }else {
-                        let  tbodyList = document.getElementById("tbody-list");
-                        tbodyList.innerHTML = '';
-                        for (let i in goodsList){
-                            let goods = goodsList[i];
-                            let status = goods.status;
-                            let checkStatus = goods.checkStatus;
-                            let a,b,c,d,e,f,g,h;
-                            if(status===1){
-                                a="已上架";
-                                c="下架";
-                                d="&#xe601;";
-                            }else if(status===2){
-                                a="已下架";
-                                c="上架";
-                                d="&#xe62f;";
-                                e='layui-btn-disabled'
-                            }
-                            if(checkStatus===0){
-                                f="去审核";
-                                g="未审核";
-                                h='layui-btn-disabled'
-                            }else if(checkStatus===1){
-                                f="查看审核";
-                                g="已审核";
-                            }else if (checkStatus===2){
-                                f="重新审核";
-                                g="未过审";
-                                h='layui-btn-disabled'
-                            }
-                            tbodyList.innerHTML+=
-                                '<tr>' +
-                                '<td>'+goods.id+'</td>' +
-                                '<td>'+goods.name+'</td>' +
-                                '<td><img class="headIcon" src='+goods.picUrls+' /></td>' +
-                                '<td>'+goods.marketPrice+'</td>' +
-                                '<td>'+goods.categoryName+'</td>' +
-                                '<td>'+goods.tagName+'</td>' +
-                                '<td>'+goods.createTime+'</td>' +
-                                '<td class="td-status" ><span id="goods-status" class="layui-btn layui-btn-normal layui-btn-mini '+e+'">'+a+'</span>' +
-                                '<span id="goods-check-status" class="layui-btn layui-btn-normal layui-btn-mini '+h+'">'+g+'</span></td>' +
-                                '<td class="td-manage">' +
-                                '<a onclick="goods_stop(this,'+goods.id+')" href="javascript:;"  title='+c+'>' +
-                                '<i class="layui-icon">'+d+'</i>' +
-                                '</a>' +
-                                '<a title="编辑" onclick="edit_user_info('+ goods.id +');xadmin.open(\'编辑\',\'member-edit.html\',500,450)" href="javascript:;">' +
-                                '<i class="layui-icon">&#xe642;</i>' +
-                                '</a>' +
-                                '<a onclick="edit_user_info('+ goods.id +');xadmin.open(\'修改密码\',\'member-password.html\',500,270)" title="修改密码" href="javascript:;">' +
-                                '<i class="layui-icon">&#xe631;</i>' +
-                                '</a>' +
-                                '<a title="删除" onclick="member_del(this,'+goods.id+')" href="javascript:;">' +
-                                '<i class="layui-icon">&#xe640;</i>' +
-                                '</a>' +
-                                '</td>' +
-                                '</tr>';
+            $.post(domain + '/goods/goods-list', objToJson(jsonReq), function (res) {
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+                    , count: res.data.goodsCount //数据总数，从服务端得到
+                    , limit: jsonReq.pageSize
+                    , curr: jsonReq.currentPage     //当前页
+                    , first: "首页"
+                    , last: "尾页"
+                    , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            jsonReq.currentPage = obj.curr;
+                            jsonReq.pageSize = obj.limit;
+                            initLayPage(jsonReq);
                         }
                     }
-                }else {
+                });
+                if(res){
+                    layer.close(loadIndex);
+                }
+                let data = res.data;
+                if (res.code === 200) {
+                    let goodsList = data.goodsOuts;
+                    if (goodsList.length < 1 || data.goodsCount === 0) {
+                        layer.msg('没有更多数据了◑﹏◐', {offset: '60px'});
+                    } else {
+                        fillTable(goodsList)
+                    }
+                } else {
                     layer.msg(res.msg)
                 }
+            })
+        }
+        function fillTable(goodsList) {
+            $("#tbody-list").html('');
+            let info = '';
+            $.each(goodsList, function (index, goods) {
+                let status = goods.status;
+                let checkStatus = goods.checkStatus;
+                let a, b, c, d, e, f, g, h,i;
+                if (status === 1) {
+                    a = "已上架";
+                    c = "下架";
+                    d = "&#xe601;";
+                } else if (status === 2) {
+                    a = "已下架";
+                    c = "上架";
+                    d = "&#xe62f;";
+                    e = 'layui-btn-disabled'
+                }
+                if (checkStatus === 0) {
+                    f = "去审核";
+                    g = "未审核";
+                    h = 'layui-btn-disabled'
+                    i='&#xe609;'
+                } else if (checkStatus === 1) {
+                    f = "查看审核";
+                    g = "已审核";
+                    i='&#xe63c;'
+                } else if (checkStatus === 2) {
+                    f = "重新审核";
+                    g = "未过审";
+                    h = 'layui-btn-disabled'
+                    i='&#xe610;'
+                }
+                info +=
+                    '<tr>' +
+                    '<td>' + goods.id + '</td>' +
+                    '<td>' + goods.name + '</td>' +
+                    '<td><img class="headIcon" src=' + goods.picUrls + ' /></td>' +
+                    '<td>' + goods.marketPrice + '</td>' +
+                    '<td>' + goods.categoryName + '</td>' +
+                    '<td>' + goods.tagName + '</td>' +
+                    '<td>' + goods.createTime + '</td>' +
+                    '<td class="td-status" ><span id="goods-status" class="layui-btn  ' + e + '">' + a + '</span>' +
+                    '<span id="goods-check-status" class="layui-btn layui-btn-normal  ' + h + '">' + g + '</span></td>' +
+                    '<td class="td-manage" id="td-manage">' +
+                    '<a onclick="goods_stop(this,' + goods.id + ')" href="javascript:;"  title=' + c + '>' +
+                    '<i class="layui-icon">' + d + '</i>' +
+                    '</a>' +
+                    '<a title="'+f+'" onclick="setSessionID(' + goods.id + ');xadmin.open(\' \',\'goods_to_examine.html\',900,600)" href="javascript:;">' +
+                    '<i class="layui-icon">'+i+'</i>' +
+                    '</a>'+
+                    '<a title="编辑" onclick="setSessionID(' + goods.id + ');xadmin.open(\'编辑\',\'member-edit.html\',500,450)" href="javascript:;">' +
+                    '<i class="layui-icon">&#xe642;</i>' +
+                    '</a>' +
+                    '<a onclick="setSessionID(' + goods.id + ');xadmin.open(\'修改密码\',\'member-password.html\',500,270)" title="修改密码" href="javascript:;">' +
+                    '<i class="layui-icon">&#xe631;</i>' +
+                    '</a>' +
+                    '<a title="删除" onclick="member_del(this,' + goods.id + ')" href="javascript:;">' +
+                    '<i class="layui-icon">&#xe640;</i>' +
+                    '</a>' +
+                    '</td>' +
+                    '</tr>';
             });
-
+            $("#tbody-list").append(info);
         }
 
     });
@@ -386,10 +378,5 @@
             })
         });
     }
-
-    function edit_user_info(id) {
-        window.sessionStorage.setItem('userId',id);
-    }
-
 </script>
 </html>
