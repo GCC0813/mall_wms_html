@@ -152,9 +152,33 @@
 <script>
     layui.use('layer', function(){
         let loadIndex=layer.load(2);
+        let goodsId = window.sessionStorage.getItem("ID");
         $(function () {
+            initialization(goodsId);
+        });
+
+        $("#confirmation-audit").click(function () {
+            layer.confirm("确认要审核成功，成功将不可取消！",function () {
+                let o={
+                    goodsId: goodsId,
+                    type : 2,
+                    status: 1
+                };
+                $.post(domain+'/goods/set-goods-status',objToJson(o),function (res) {
+                    if(res.code===200){
+                        layer.msg("确认审核成功！",{icon:6,offset:25},function () {
+                            initialization(goodsId);
+                        });
+                    }else {
+                        layer.msg(res.msg)
+                    }
+                });
+            })
+        });
+
+        function initialization(goodsId){
             let jsonReq={
-                goodsId : window.sessionStorage.getItem("ID")
+                goodsId : goodsId
             };
             $.post(domain+'/goods/details',objToJson(jsonReq),function (res) {
                 if(res){
@@ -163,6 +187,7 @@
                 if(res.code ===200){
                     let data =res.data;
                     $('#goods-name').attr('placeholder',data.name);
+                    $("#pic-img img").remove()
                     $.each(data.picUrls, function (index, pic) {
                         $("#pic-img").append('<td><img class="layui-upload-img" src="'+pic+'" style="height: 100px"></td>');
                     });
@@ -170,6 +195,7 @@
                         photos: '#pic-img'
                         ,anim: 0
                     });
+                    $("#detail-pic-img img").remove()
                     $.each(data.detailPicUrls, function (index, pic) {
                         $("#detail-pic-img").append('<td><img class="layui-upload-img" src="'+pic+'" style="height: 100px"></td>');
                     });
@@ -192,6 +218,7 @@
                     let goodsCheckStatus = $('#good-check-status');
                     if(data.checkStatus===1){
                         goodsCheckStatus.removeClass("layui-btn-disabled")
+                        $("#confirmation-audit").remove();
                     }
                     goodsCheckStatus.text(data.checkStatusStr);
 
@@ -205,7 +232,7 @@
                     layer.msg(res.msg)
                 }
             });
-        })
+        }
     });
 </script>
 
