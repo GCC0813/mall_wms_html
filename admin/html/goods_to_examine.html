@@ -151,15 +151,6 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
     layui.use('layer', function(){
-        //调用示例
-        layer.photos({
-            photos: '#layer-photos-detail'
-            ,anim: 0
-        });
-        layer.photos({
-            photos: '#pic-img'
-            ,anim: 0
-        });
         let loadIndex=layer.load(2);
         $(function () {
             let jsonReq={
@@ -173,10 +164,18 @@
                     let data =res.data;
                     $('#goods-name').attr('placeholder',data.name);
                     $.each(data.picUrls, function (index, pic) {
-                        $("#pic-img").append('<td><img class="layui-upload-img" alt="图片名" layer-src="'+pic+'" src="'+pic+'" style="height: 100px"></td>');
+                        $("#pic-img").append('<td><img class="layui-upload-img" src="'+pic+'" style="height: 100px"></td>');
+                    });
+                    layer.photos({
+                        photos: '#pic-img'
+                        ,anim: 0
                     });
                     $.each(data.detailPicUrls, function (index, pic) {
-                        $("#detail-pic-img").append('<td><img class="layui-upload-img" alt="图片名" layer-src="'+pic+'" src="'+pic+'" style="height: 100px"></td>');
+                        $("#detail-pic-img").append('<td><img class="layui-upload-img" src="'+pic+'" style="height: 100px"></td>');
+                    });
+                    layer.photos({
+                        photos: '#detail-pic-img'
+                        ,anim: 0
                     });
                     $('#goods-synopsis').attr('placeholder',data.synopsis);
                     $('#goods-category').attr('placeholder',data.categoryName);
