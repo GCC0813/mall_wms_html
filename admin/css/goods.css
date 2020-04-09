@@ -19,3 +19,9 @@
 #status-checkBox button{
     cursor: no-drop;
 }
+
+.add-img-edit{
+    margin-left: 10px;
+    font-size: 70px!important;
+    height: 70px!important;
+}

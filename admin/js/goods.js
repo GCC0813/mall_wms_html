@@ -39,7 +39,9 @@ function initialization(goodsId,loadIndex,index){
                 goods_supplier.attr('placeholder',data.supplier);
                 physical_or_virtual.attr('placeholder',data.physicalOrVirtual);
             }else if(index===2){
+                $.post(domain+'/goods/details',objToJson(jsonReq),function (res) {
 
+                });
             }
             $('#market-price').attr('placeholder','￥'+data.marketPrice);
             $('#purchase-price').attr('placeholder','￥'+data.purchasePrice);
@@ -62,6 +64,10 @@ function initialization(goodsId,loadIndex,index){
             $('#goods-founder-time').attr('placeholder',data.createTime);
             $('#goods-modifier').attr('placeholder',data.modifier);
             $('#goods-modify-time').attr('placeholder',data.modificationTime);
+            if(index===2){
+                $("#pic-img").append('<td><button title="添加商品主图" class="layui-btn layui-btn-primary add-img-edit">+</button></td>');
+                $("#detail-pic-img").append('<td><button title="添加商品详情图" class="layui-btn layui-btn-primary add-img-edit">+</button></td>')
+            }
         }else {
             layer.msg(res.msg)
         }
