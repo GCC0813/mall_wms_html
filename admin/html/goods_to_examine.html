@@ -148,13 +148,13 @@
 <script src="../../lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../../comm/jquery.js"></script>
 <script type="text/javascript" src="../../comm/comm.js"></script>
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script type="text/javascript" src="../js/goods.js"></script>
 <script>
     layui.use('layer', function(){
         let loadIndex=layer.load(2);
         let goodsId = window.sessionStorage.getItem("ID");
         $(function () {
-            initialization(goodsId);
+            initialization(goodsId,loadIndex,1);
         });
 
         $("#confirmation-audit").click(function () {
@@ -167,7 +167,7 @@
                 $.post(domain+'/goods/set-goods-status',objToJson(o),function (res) {
                     if(res.code===200){
                         layer.msg("确认审核成功！",{icon:6,offset:25},function () {
-                            initialization(goodsId);
+                            initialization(goodsId,loadIndex,1);
                         });
                     }else {
                         layer.msg(res.msg)
@@ -176,63 +176,6 @@
             })
         });
 
-        function initialization(goodsId){
-            let jsonReq={
-                goodsId : goodsId
-            };
-            $.post(domain+'/goods/details',objToJson(jsonReq),function (res) {
-                if(res){
-                    layer.close(loadIndex);
-                }
-                if(res.code ===200){
-                    let data =res.data;
-                    $('#goods-name').attr('placeholder',data.name);
-                    $("#pic-img img").remove()
-                    $.each(data.picUrls, function (index, pic) {
-                        $("#pic-img").append('<td><img class="layui-upload-img" src="'+pic+'" style="height: 100px"></td>');
-                    });
-                    layer.photos({
-                        photos: '#pic-img'
-                        ,anim: 0
-                    });
-                    $("#detail-pic-img img").remove()
-                    $.each(data.detailPicUrls, function (index, pic) {
-                        $("#detail-pic-img").append('<td><img class="layui-upload-img" src="'+pic+'" style="height: 100px"></td>');
-                    });
-                    layer.photos({
-                        photos: '#detail-pic-img'
-                        ,anim: 0
-                    });
-                    $('#goods-synopsis').attr('placeholder',data.synopsis);
-                    $('#goods-category').attr('placeholder',data.categoryName);
-                    $('#goods-tag').attr('placeholder',data.tagName);
-                    $('#physical-or-virtual').attr('placeholder',data.physicalOrVirtual);
-                    $('#market-price').attr('placeholder','￥'+data.marketPrice);
-                    $('#purchase-price').attr('placeholder','￥'+data.purchasePrice);
-                    $('#goods-supplier').attr('placeholder',data.supplier);
-                    let goodsStatus = $('#goods-status');
-                    if(data.status===2){
-                        goodsStatus.addClass("layui-btn-disabled");
-                    }
-                    goodsStatus.text(data.statusStr);
-                    let goodsCheckStatus = $('#good-check-status');
-                    if(data.checkStatus===1){
-                        goodsCheckStatus.removeClass("layui-btn-disabled")
-                        $("#confirmation-audit").remove();
-                    }
-                    goodsCheckStatus.text(data.checkStatusStr);
-
-                    $('#goods-toExamine-people').attr('placeholder',data.toExamine);
-                    $('#goods-toExamine-time').attr('placeholder',data.toExamineTime);
-                    $('#goods-founder').attr('placeholder',data.founder);
-                    $('#goods-founder-time').attr('placeholder',data.createTime);
-                    $('#goods-modifier').attr('placeholder',data.modifier);
-                    $('#goods-modify-time').attr('placeholder',data.modificationTime);
-                }else {
-                    layer.msg(res.msg)
-                }
-            });
-        }
     });
 </script>
 
