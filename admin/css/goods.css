@@ -23,5 +23,25 @@
 .add-img-edit{
     margin-left: 10px;
     font-size: 70px!important;
-    height: 70px!important;
+    height: 100px!important;
+    width: 100px !important;
+    cursor: pointer!important;
+}
+.delete-img-button{
+    border-radius:20px;
+    height: 20px;
+    width: 20px;
+    background: red;
+    color: white;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    margin-left: -23px;
+    margin-top: 1px;
+    display: none;
+    opacity: 0;
+}
+.layui-upload-img{
+    height: 100px
 }

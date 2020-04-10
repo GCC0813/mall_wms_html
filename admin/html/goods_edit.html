@@ -83,9 +83,6 @@
             <label class="layui-form-label">实物或虚拟</label>
             <div class="layui-input-inline">
                 <select name="modules" lay-search="" id="physical-or-virtual">
-                    <option value="">直接选择或搜索选择</option>
-                    <option value="1">实物</option>
-                    <option value="2">虚拟</option>
                 </select>
             </div>
         </div>
@@ -93,8 +90,6 @@
             <label class="layui-form-label">供应商</label>
             <div class="layui-input-inline">
                 <select name="modules" lay-search="" id="goods-supplier">
-                    <option value="">Adidas</option>
-                    <option value="1">Nick</option>
                 </select>
             </div>
         </div>
@@ -158,10 +153,13 @@
     </div>
 </div>
 
-<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../lib/layui/layui.js" ></script>
 <script type="text/javascript" src="../../comm/jquery.js"></script>
 <script type="text/javascript" src="../../comm/comm.js"></script>
 <script type="text/javascript" src="../js/goods.js"></script>
+<script type="text/javascript" src="../../comm/qiniu.min.js"></script>
+<script type="text/javascript" src="../../comm/moxie.min.js"></script>
+<script type="text/javascript" src="../../comm/plupload.full.min.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
     layui.use([ 'layedit','jquery'], function(){
@@ -171,6 +169,11 @@
             initialization(goodsId,loadIndex,2);
         });
     });
+
+
+
+
+
 </script>
 
 </body>
