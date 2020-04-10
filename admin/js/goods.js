@@ -13,7 +13,7 @@ function initialization(goodsId,loadIndex,index){
             $('#goods-name').attr('placeholder',data.name);
             $("#pic-img img").remove()
             $.each(data.picUrls, function (index, pic) {
-                $("#pic-img").append('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this)"><i class="layui-icon"></i></button></td>');
+                $("#pic-img").append('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,1)"><i class="layui-icon"></i></button></td>');
             });
             layer.photos({
                 photos: '#pic-img'
@@ -21,7 +21,7 @@ function initialization(goodsId,loadIndex,index){
             });
             $("#detail-pic-img img").remove()
             $.each(data.detailPicUrls, function (index, pic) {
-                $("#detail-pic-img").append('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this)"><i class="layui-icon"></i></button></td>');
+                $("#detail-pic-img").append('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,2)"><i class="layui-icon"></i></button></td>');
             });
             layer.photos({
                 photos: '#detail-pic-img'
@@ -98,12 +98,8 @@ function initialization(goodsId,loadIndex,index){
             $('#goods-modify-time').attr('placeholder',data.modificationTime);
             if(index===2){
                 if($("#pic-img img").length<6){
-                    $("#pic-img").append('<td><button title="添加商品主图" class="layui-btn layui-btn-primary add-img-edit" id="goods-add-img-edit">+</button></td>');
+                    $("#pic-img").append('<td id="goods-add-img-edit-container"><button title="添加商品主图" class="layui-btn layui-btn-primary add-img-edit" id="goods-add-img-edit">+</button></td>');
                 }
-                if($("#detail-pic-img img").length<6){
-                    $("#detail-pic-img").append('<td><button title="添加商品详情图" class="layui-btn layui-btn-primary add-img-edit">+</button></td>')
-                }
-
                 Qiniu.uploader({
                     runtimes: 'html5,flash,html4',      // 上传模式，依次退化
                     browse_button: 'goods-add-img-edit',         // 上传选择的点选按钮，必需
@@ -122,12 +118,12 @@ function initialization(goodsId,loadIndex,index){
                     //unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
                     // save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
                     domain: 'http://static.gcc666.top/',     // bucket域名，下载资源时用到，必需
-                    container: 'goods-add-img-edit',             // 上传区域DOM ID，默认是browser_button的父元素
+                    container: 'goods-add-img-edit-container',             // 上传区域DOM ID，默认是browser_button的父元素
                     max_file_size: '100mb',             // 最大文件体积限制
                     //flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
                     max_retries: 3,                     // 上传失败最大重试次数
                     dragdrop: true,                     // 开启可拖曳上传
-                    drop_element: 'goods-add-img-edit',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+                    drop_element: 'goods-add-img-edit-container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
                     chunk_size: '4mb',                  // 分块上传时，每块的体积
                     auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
                     init: {
@@ -151,8 +147,97 @@ function initialization(goodsId,loadIndex,index){
                             //  }
                             let qiniuHeadKey = JSON.parse(info).key;
                             let src = up.getOption('domain') + qiniuHeadKey;
-                            alert(src)
+                            let goods_add_img_edit_container=$("#goods-add-img-edit-container");
+                            goods_add_img_edit_container.before('<td><img class="layui-upload-img" src="'+src+'"></td>')
+                            goods_add_img_edit_container.css("display",'none');
+                            if($("#pic-img img").length<6){
+                                goods_add_img_edit_container.css("display",'block');
+                            }else {
+                                layer.msg("商品主图最多6张图片,不可继续增加！！")
+                            }
+                            layer.photos({
+                                photos: '#pic-img'
+                                ,anim: 0
+                            });
+                        },
+                        'Error': function (up, err, errTip) {
+                            //上传出错时，处理相关的事情
+                        },
+                        'UploadComplete': function () {
+                            //队列文件处理完毕后，处理相关的事情
+                        },
+                        'Key': function (up, file) {
+                            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                            // 该配置必须要在unique_names: false，save_key: false时才生效
+                            /*   var key = "";
+                        // do something with key here
+                        return key*/
+                        }
+                    }
+                });
 
+                if($("#detail-pic-img img").length<6){
+                    $("#detail-pic-img").append('<td id="goods-add-detail-img-edit-container"><button title="添加商品详情图" class="layui-btn layui-btn-primary add-img-edit" id="goods-add-detail-img-edit">+</button></td>')
+                }
+                Qiniu.uploader({
+                    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+                    browse_button: 'goods-add-detail-img-edit',         // 上传选择的点选按钮，必需
+                    // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
+                    // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
+                    // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
+                    //uptoken : domain+'/upload/getQiniuToken', // uptoken是上传凭证，由其他程序生成
+                    uptoken_url: domain + '/upload/getQiniuToken',// Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+                    // uptoken_func: function(){    // 在需要获取uptoken时，该方法会被调用
+                    //    // do something
+                    //    return uptoken;
+                    // },
+                    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+                    // downtoken_url: '/downtoken',
+                    // Ajax请求downToken的Url，私有空间时使用，JS-SDK将向该地址POST文件的key和domain，服务端返回的JSON必须包含url字段，url值为该文件的下载地址
+                    //unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+                    // save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+                    domain: 'http://static.gcc666.top/',     // bucket域名，下载资源时用到，必需
+                    container: 'goods-add-detail-img-edit-container',             // 上传区域DOM ID，默认是browser_button的父元素
+                    max_file_size: '100mb',             // 最大文件体积限制
+                    //flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
+                    max_retries: 3,                     // 上传失败最大重试次数
+                    dragdrop: true,                     // 开启可拖曳上传
+                    drop_element: 'goods-add-detail-img-edit-container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+                    chunk_size: '4mb',                  // 分块上传时，每块的体积
+                    auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+                    init: {
+                        'FilesAdded': function (up, files) {
+                            plupload.each(files, function (file) {
+                                // 文件添加进队列后，处理相关的事情
+                            });
+                        },
+                        'BeforeUpload': function (up, file) {
+                            // 每个文件上传前，处理相关的事情
+                        },
+                        'UploadProgress': function (up, file) {
+                            // 每个文件上传时，处理相关的事情
+                        },
+                        'FileUploaded': function (up, file, info) {
+                            // 每个文件上传成功后,处理相关的事情
+                            // 其中 info.response 是文件上传成功后，服务端返回的json，形式如
+                            // {
+                            //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+                            //    "key": "gogopher.jpg"
+                            //  }
+                            let qiniuHeadKey = JSON.parse(info).key;
+                            let src = up.getOption('domain') + qiniuHeadKey;
+                            let goods_add_img_edit_container=$("#goods-add-detail-img-edit-container");
+                            goods_add_img_edit_container.before('<td><img class="layui-upload-img" src="'+src+'"></td>')
+                            goods_add_img_edit_container.css("display",'none');
+                            if($("#detail-pic-img img").length<6){
+                                goods_add_img_edit_container.css("display",'block');
+                            }else {
+                                layer.msg("商品详情图最多6张图片,不可继续增加！！")
+                            }
+                            layer.photos({
+                                photos: '#detail-pic-img'
+                                ,anim: 0
+                            });
                         },
                         'Error': function (up, err, errTip) {
                             //上传出错时，处理相关的事情
@@ -232,11 +317,28 @@ function set_delete_button_isShow(oc,id) {
     }
 }
 
-function delete_img(th) {
+function delete_img(th,cos) {
     layer.confirm('本次删除是静态删除,可以通过刷新页面重新选择删除,是否确认？',
         {btn: ["确认","取消"]},function(index){
         $(th).prev().remove();
         layer.close(index);
+        if(cos===1){
+            if($("#pic-img img").length<6){
+                $("#goods-add-img-edit-container").css("display",'block');
+            }
+            layer.photos({
+                photos: '#pic-img'
+                ,anim: 0
+            });
+        }else if(cos===2) {
+            if($("#detail-pic-img img").length<6){
+                $("#goods-add-detail-img-edit-container").css("display",'block');
+            }
+            layer.photos({
+                photos: '#detail-pic-img'
+                ,anim: 0
+            });
+        }
     });
 }
 
