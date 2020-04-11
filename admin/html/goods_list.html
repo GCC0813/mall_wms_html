@@ -55,10 +55,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="layui-card-header">
-                    <!--<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>-->
+               <!-- <div class="layui-card-header">
+                    &lt;!&ndash;<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>&ndash;&gt;
                     <button class="layui-btn" onclick="xadmin.open('添加商品','./member-add.html',600,430)"><i class="layui-icon"></i>添加</button>
-                </div>
+                </div>-->
                 <div class="layui-card-body layui-table-body layui-table-main table_menu_list">
                     <table class="layui-table layui-form " id="sample-table">
                         <thead>
@@ -304,10 +304,10 @@
                     '<a onclick="goods_stop(this,' + goods.id + ')" href="javascript:;"  title=' + c + '>' +
                     '<i class="layui-icon">' + d + '</i>' +
                     '</a>' +
-                    '<a title="'+f+'" onclick="setSessionID(' + goods.id + ');xadmin.open(\' \',\'goods_to_examine.html\',900,500)" href="javascript:;">' +
+                    '<a title="'+f+'" onclick="setSessionID(' + goods.id + ');xadmin.open(\'审核\',\'goods_to_examine.html\',900,500)" href="javascript:;">' +
                     '<i class="layui-icon">'+i+'</i>' +
                     '</a>'+
-                    '<a title="编辑" onclick="setSessionID(' + goods.id + ');xadmin.open(\'编辑\',\'goods_edit.html\',900,500)" href="javascript:;">' +
+                    '<a title="编辑" onclick="setSessionID(' + goods.id + ');xadmin.open(\'查看和编辑\',\'goods_edit.html\',900,500)" href="javascript:;">' +
                     '<i class="layui-icon">&#xe642;</i>' +
                     '</a>' +
                     '<a title="删除" onclick="member_del(this,' + goods.id + ')" href="javascript:;">' +
@@ -360,12 +360,11 @@
 
     /*用户-删除*/
     function member_del(a,id){
-        layer.confirm('确认要删除吗？',function(){
+        layer.confirm('确认要删除吗？删除将不可恢复！',function(){
             let obj={
-                userId:id,
-                type:3
+                goodsId:id,
             };
-            $.post(domain+'/user-management/user-operation',objToJson(obj), function (res) {
+            $.post(domain+'/goods/delete-goods',objToJson(obj), function (res) {
                 if(res.code ===200 ){
                     //发异步删除数据
                     $(a).parents("tr").remove();
