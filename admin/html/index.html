@@ -64,11 +64,6 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>商品入仓</cite></a>
                             </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('商品出仓','cate.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>商品出仓</cite></a>
-                            </li>
                         </ul>
                     </li>
                     <li>
@@ -83,14 +78,9 @@
                                     <cite>订单列表</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('出货单','order-list1.html')">
+                                <a onclick="xadmin.add_tab('商品出仓','cate.html')">
                                     <i class="iconfont">&#xe6a7;</i>
-                                    <cite>出货单</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('进货单','order-list1.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>进货单</cite></a>
+                                    <cite>商品出仓</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -106,7 +96,7 @@
                                     <cite>商品类别</cite></a>
                             </li>
                             <li>
-                                <a onclick="xadmin.add_tab('类别管理','member-del.html')">
+                                <a onclick="xadmin.add_tab('商品标签','member-del.html')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>类别管理</cite></a>
                         </ul>
@@ -123,10 +113,6 @@
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>会员列表</cite></a>
                             </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('修改资料','member-del.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>修改资料</cite></a>
                         </ul>
                     </li>
                     <li>
@@ -259,13 +245,7 @@
                                 ,icon: 1
                             });
                             let indexData = res.data;
-                            let userName = indexData.userName;
-                            window.sessionStorage.setItem('userName',userName);
-                            document.getElementById("admin-name").innerText= userName;
-                        }else {
-                            layer.msg(res.msg,{icon:5,offset: '20px'},function () {
-                                location.href='../login.html'
-                            })
+                            document.getElementById("admin-name").innerText=indexData.userName ;
                         }
                     });
                 })

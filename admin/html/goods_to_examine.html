@@ -169,6 +169,10 @@
                         layer.msg("确认审核成功！",{icon:6,offset:25},function () {
                             initialization(goodsId,loadIndex,1);
                         });
+                    }else if(res.code===102){
+                        layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                            top.location='../login.html'
+                        })
                     }else {
                         layer.msg(res.msg)
                     }

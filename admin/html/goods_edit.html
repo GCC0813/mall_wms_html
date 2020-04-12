@@ -230,8 +230,8 @@
                     xadmin.close();
                 });
             }else if(res.code===102){
-                layer.msg(res.msg,function () {
-                    location.href='/login.html'
+                layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                    top.location='../login.html'
                 })
             }else {
                 layer.msg(res.msg)

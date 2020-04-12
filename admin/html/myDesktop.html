@@ -19,15 +19,7 @@
     <body>
         <div class="layui-fluid">
             <div class="layui-row layui-col-space15">
-                <div class="layui-col-md12">
-                    <div class="layui-card">
-                        <div class="layui-card-body ">
-                            <blockquote class="layui-elem-quote" >欢迎管理员：
-                                <span class="x-red" id="welcome-admin">Admin</span>
-                            </blockquote>
-                        </div>
-                    </div>
-                </div>
+
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-header">数据统计</div>
@@ -143,7 +135,6 @@
                             layer.close(loadIndex);
                         }
                         if (res.code === 200) {
-                            document.getElementById("welcome-admin").innerText = window.sessionStorage.getItem('userName');
                             let a = document.getElementById("data-statistics");
                             let list = res.data.rows;
                             for (let i =0;i<list.length;i++){
@@ -156,7 +147,11 @@
                                     '</a>\n' +
                                     '</li>'
                             }
-                        } else {
+                        } else if(res.code===102){
+                            layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                                top.location='../login.html'
+                            })
+                        }else {
                             layer.msg(res.msg)
                         }
                     })

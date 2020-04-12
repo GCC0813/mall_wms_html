@@ -85,6 +85,8 @@
             <label class="layui-form-label">实物或虚拟</label>
             <div class="layui-input-inline">
                 <select name="modules" lay-search="" id="physical-or-virtual">
+                    <option value="0">虚拟</option>
+                    <option value="1">实物</option>
                 </select>
             </div>
         </div>
@@ -104,7 +106,7 @@
         </div>
     </div>-->
 
-    <div class="layui-form-item">
+   <!-- <div class="layui-form-item">
         <div class="layui-inline">
             <label class="layui-form-label">审核人</label>
             <div class="layui-input-inline">
@@ -145,11 +147,11 @@
                 <input type="text" readonly class="layui-input" id="goods-modify-time">
             </div>
         </div>
-    </div>
+    </div>-->
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="submit" class="layui-btn" onclick="edit_goods_submit()">立即提交</button>
+            <button type="submit" class="layui-btn" onclick="add_goods_submit()">立即添加</button>
         </div>
     </div>
 </div>
@@ -163,10 +165,10 @@
 <script type="text/javascript" src="../../comm/plupload.full.min.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    let goodsId = window.sessionStorage.getItem("ID");
     layui.use([ 'layedit','jquery'], function(){
         $(function () {
             reading_add_goods();
+            set_goods_supplier_select();
         });
     });
 
@@ -232,19 +234,25 @@
         });
         form.render('select');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
+    function set_goods_supplier_select() {
+        let form = layui.form;
+        let supplier = {
+            type: 2
+        };
+        $.post(domain + '/goods/details/supplier', objToJson(supplier), function (resp) {
+            if (resp.code === 200) {
+                let supplierList = resp.data.rows;
+                let supplier_select = '<option value="0">请选择供应商</option>';
+                $.each(supplierList, function (index, supplier) {
+                    supplier_select += '<option value="' + supplier.id + '">' + supplier.name + '</option>'
+                });
+                $("#goods-supplier").html(supplier_select);
+            } else {
+                $("#goods-supplier").html('<option value="0">请选择供应商</option>');
+            }
+            form.render('select');
+        });
+    }
 
     function add_goods_submit() {
         let good_name=$("#goods-name").val();
@@ -257,11 +265,36 @@
         let purchase_price=$("#purchase-price").val();
         let physical_or_virtual=$("#physical-or-virtual").val();
         let goods_supplier=$("#goods-supplier").val();
-        if(good_name.length<1&& goods_synopsis.length<1
-            &&market_price.length<1&&purchase_price.length<1){
-            layer.msg("至少填写一项！",{icon:2,offset: '60px'});
+        if(good_name.length<1){
+            layer.msg("请填写商品名！",{offset: '60px'});
             return;
         }
+        if(pic_img.length===0 || detail_pic_img.length===0){
+            layer.msg("请上传商品图！",{offset: '60px'});
+            return;
+        }
+        if(goods_synopsis.length<1){
+            layer.msg("请填写商品简介！",{offset: '60px'});
+            return;
+        }
+
+        if(goods_category_select===0 || goods_tag_select===0){
+            layer.msg("请选择分类或标签！",{offset: '60px'});
+            return;
+        }
+        if(goods_supplier===0){
+            layer.msg("请选择供应商！",{offset: '60px'});
+            return;
+        }
+        if(market_price.length<1){
+            layer.msg("请填写市场参考价！",{offset: '60px'});
+            return;
+        }
+        if(purchase_price.length<1){
+            layer.msg("请填写采购价！",{offset: '60px'});
+            return;
+        }
+
         let pic_img_src="";
         if(pic_img.length>1){
             for (let i=0;i<pic_img.length;i++){
@@ -279,7 +312,6 @@
             detail_pic_img_src=detail_pic_img[0].src
         }
         let obj={
-            id:goodsId,
             categoryId:goods_category_select,
             tagId:goods_tag_select,
             isReal:physical_or_virtual,
@@ -299,15 +331,14 @@
         if(purchase_price.length>0){
             obj.purchasePrice=purchase_price;
         }
-        $.post(domain+'/goods/change-info',objToJson(obj),function (res) {
+        $.post(domain+'/goods/add',objToJson(obj),function (res) {
             if(res.code===200){
-                layer.msg("修改成功！",function () {
-                    //关闭当前frame
-                    xadmin.close();
+                layer.msg("增加商品成功！请继续添加。",function () {
+                    location.reload()
                 });
             }else if(res.code===102){
-                layer.msg(res.msg,function () {
-                    location.href='/login.html'
+                layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                    top.location='../login.html'
                 })
             }else {
                 layer.msg(res.msg)

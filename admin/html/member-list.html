@@ -240,6 +240,10 @@
                                       '</tr>';
                               }
                           }
+                      }else if(res.code===102){
+                          layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                              top.location='../login.html'
+                          })
                       }else {
                           layer.msg(res.msg)
                       }
@@ -277,6 +281,10 @@
                               $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('已停用');
                           }
 
+                      }else if(res.code===102){
+                          layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                              top.location='../login.html'
+                          })
                       }else {
                           layer.msg(res.msg)
                       }
@@ -297,6 +305,10 @@
                       //发异步删除数据
                       $(a).parents("tr").remove();
                       layer.msg('已删除!',{icon:1,time:1000});
+                  }else if(res.code===102){
+                      layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                          top.location='../login.html'
+                      })
                   }else {
                       layer.msg(res.msg)
                   }

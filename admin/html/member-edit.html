@@ -111,6 +111,10 @@
                             city.setAttribute("placeholder", data.city!=null?data.city:"");
                             district.setAttribute("placeholder",data.district!=null?data.district:"");
                             $('#upload-ok-img').attr("src", data.headIcon!=null?data.headIcon:"http://static.gcc666.top/default_head.jpg");
+                        }else if(res.code===102){
+                            layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                                top.location='../login.html'
+                            })
                         }else {
                             layer.msg(res.msg)
                         }
@@ -218,6 +222,10 @@
                     $.post(domain+'/user/updateUserInfo',objToJson(obj), function (res) {
                         if (res.code === 200) {
                             layer.msg("修改成功！")
+                        }else if(res.code===102){
+                            layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                                top.location='../login.html'
+                            })
                         }else {
                             layer.msg(res.msg)
                         }

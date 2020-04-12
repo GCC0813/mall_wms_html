@@ -118,7 +118,7 @@ function initialization(goodsId,loadIndex,index){
             $('#goods-modify-time').attr('placeholder',data.modificationTime);
             if(index===2){
                 if($("#pic-img img").length>=6){
-                    $("#goods-add-detail-img-edit-container").css("display",'none');
+                    $("#goods-add-img-edit-container").css("display",'none');
                     //$("#pic-img").append('<td id="goods-add-img-edit-container"><button title="添加商品主图" class="layui-btn layui-btn-primary add-img-edit" id="goods-add-img-edit">+</button></td>');
                 }
 
@@ -128,6 +128,10 @@ function initialization(goodsId,loadIndex,index){
                 }
 
             }
+        }else if(res.code===102) {
+            layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                top.location='../login.html'
+            })
         }else {
             layer.msg(res.msg)
         }

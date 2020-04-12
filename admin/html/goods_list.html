@@ -224,35 +224,39 @@
                 };
             }
             $.post(domain + '/goods/goods-list', objToJson(jsonReq), function (res) {
-                //执行一个laypage实例
-                laypage.render({
-                    elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
-                    , count: res.data.goodsCount //数据总数，从服务端得到
-                    , limit: jsonReq.pageSize
-                    , curr: jsonReq.currentPage     //当前页
-                    , first: "首页"
-                    , last: "尾页"
-                    , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-                    , jump: function (obj, first) {
-                        if (!first) {
-                            jsonReq.currentPage = obj.curr;
-                            jsonReq.pageSize = obj.limit;
-                            initLayPage(jsonReq);
-                        }
-                    }
-                });
                 if(res){
                     layer.close(loadIndex);
                 }
                 let data = res.data;
                 if (res.code === 200) {
+                    //执行一个laypage实例
+                    laypage.render({
+                        elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+                        , count: res.data.goodsCount //数据总数，从服务端得到
+                        , limit: jsonReq.pageSize
+                        , curr: jsonReq.currentPage     //当前页
+                        , first: "首页"
+                        , last: "尾页"
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , jump: function (obj, first) {
+                            if (!first) {
+                                jsonReq.currentPage = obj.curr;
+                                jsonReq.pageSize = obj.limit;
+                                initLayPage(jsonReq);
+                            }
+                        }
+                    });
                     let goodsList = data.goodsOuts;
                     if (goodsList.length < 1 || data.goodsCount === 0) {
                         layer.msg('没有更多数据了◑﹏◐', {offset: '60px'});
                     } else {
                         fillTable(goodsList)
                     }
-                } else {
+                } else if(res.code===102){
+                    layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                        top.location='../login.html'
+                    })
+                }else {
                     layer.msg(res.msg)
                 }
             })
@@ -350,6 +354,10 @@
                             layer.msg('已下架 !',{icon:1,time:1000});
                             $(obj).parents("tr").find(".td-status").find('#goods-status').addClass('layui-btn-disabled').html('已下架');
                         }
+                    }else if(res.code===102){
+                        layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                            top.location='../login.html'
+                        })
                     }else {
                         layer.msg(res.msg)
                     }
@@ -369,6 +377,10 @@
                     //发异步删除数据
                     $(a).parents("tr").remove();
                     layer.msg('已删除!',{icon:1,time:1000});
+                }else if(res.code===102){
+                    layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                        top.location='../login.html'
+                    })
                 }else {
                     layer.msg(res.msg)
                 }
