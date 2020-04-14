@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="../css/font.css">
     <link rel="stylesheet" href="../css/admin.css">
     <script src="../../lib/layui/layui.js" charset="utf-8"></script>
+    <script src="../../comm/comm.js"></script>
+    <script src="../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/admin.js"></script>
+    <script type="text/javascript" src="../../comm/jquery.js"></script>
     <script type="text/javascript" src="../js/admin.js"></script>
     <script type="text/javascript" src="../../comm/jquery.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -24,27 +28,6 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-body">
-                    <div class="layui-col-space5">
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
-                        </div>
-                        <span>和</span>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
-                        </div>
-                        <span>或</span>
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="text" name="goodsname"  placeholder="请输入分类名或标签名" autocomplete="off" class="layui-input">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <button class="layui-btn" id="select-list"><i class="layui-icon"  title="搜索">&#xe615;</i></button>
-                            <a class="layui-btn layui-btn-small" onclick="location.reload()" title="刷新">
-                                <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="layui-card-body ">
                     <table class="layui-table layui-form">
                         <thead>
@@ -57,67 +40,8 @@
                             <th>操作</th>
                         </thead>
                         <tbody class="x-cate">
-                        <tr cate-id='1' fid='0' >
-                            <td>1</td>
-                            <td>
-                                <i class="layui-icon x-show" status='true'>&#xe623;</i>
-                                酒类
-                            </td>
-                            <th>备注</th>
-                            <td>asdsad</td>
-                            <td>
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                            </td>
-                            <td class="td-manage">
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>
-                                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-                            </td>
-                        </tr>
-                        <tr cate-id='2' fid='1'>
-                            <td>3</td>
-                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <i class="layui-icon layui-icon-triangle-d">  </i>红酒</td>
-                            <th>备注</th>
-                            <td>asdasfds</td>
-                            <td>
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                            </td>
-                            <td class="td-manage">
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-                            </td>
-                        </tr>
-                        <tr cate-id='2' fid='1'>
-                            <td>4</td>
-                            <td>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                <i class="layui-icon layui-icon-triangle-d">  </i>白酒
-                            </td>
-                            <th>备注</th>
-                            <td>wefsdfs</td>
-                            <td>
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                            </td>
-                            <td class="td-manage">
-                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'要删除的id')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
-                </div>
-                <div class="layui-card-body ">
-                    <div class="page">
-                        <div>
-                            <a class="prev" href="">&lt;&lt;</a>
-                            <a class="num" href="">1</a>
-                            <span class="current">2</span>
-                            <a class="num" href="">3</a>
-                            <a class="num" href="">489</a>
-                            <a class="next" href="">&gt;&gt;</a></div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -134,7 +58,87 @@
         laydate.render({
             elem: '#end' //指定元素
         });
+        $(function () {
+            set_cate_tag_list();
+        });
 
+
+        function set_cate_tag_list(){
+            $.post(domain + '/category-tag/category-tag-list', function (res) {
+                let code = res.code;
+                let msg = res.msg;
+                let categoryTagList = res.data.categoryTagList;
+                if(code===200){
+                    let catesTags="";
+                    let cates = "";
+                    $.each(categoryTagList,function (index,categoryTagOut) {
+                        let tags = "";
+                        $.each(categoryTagOut.tags,function (index,tag) {
+                            tags+='<tr cate-id="'+index+1+'" fid="'+categoryTagOut.id+'">' +
+                                '<td>'+tag.id+'</td>' +
+                                '<td>' +
+                                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                '<i class="layui-icon layui-icon-triangle-d">  </i>'+tag.name+''+
+                                '</td>' +
+                                '<th>'+tag.remark+'</th>'+
+                                '<td>'+tag.creatTime+'</td>' +
+                                '<td>' +
+                                '<button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>' +
+                                '</td>' +
+                                '<td class="td-manage">\n' +
+                                '<button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>' +
+                                '<button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,\'要删除的id\')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
+                                '</td>' +
+                                '</tr>';
+                        });
+                        cates +='<tr cate-id='+categoryTagOut.id+' fid="0" >' +
+                            '<td>1</td>' +
+                            '<td>' +
+                            '<i class="layui-icon x-show" status=\'true\'>&#xe623;</i>'+categoryTagOut.name+''+
+                            '</td>' +
+                            '<th>备注</th>\n' +
+                            '<td>'+categoryTagOut.creatTime+'</td>\n' +
+                            '<td>\n' +
+                            '<button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>\n' +
+                            '<button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>\n' +
+                            '</td>\n' +
+                            '<td class="td-manage">\n' +
+                            '<button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>\n' +
+                            '<button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>\n' +
+                            '<button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,\'要删除的id\')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>\n' +
+                            '</td>\n' +
+                            '</tr>';
+                        cates = cates + tags;
+                        catesTags = cates;
+                    });
+                    $(".x-cate").html(catesTags);
+                }else if(code===102){
+
+                }else {
+
+                }
+                $("tbody.x-cate tr[fid!='0']").hide();
+                // 栏目多级显示效果
+                $('.x-show').click(function () {
+                    if($(this).attr('status')=='true'){
+                        $(this).html('&#xe625;');
+                        $(this).attr('status','false');
+                        cateId = $(this).parents('tr').attr('cate-id');
+                        $("tbody tr[fid="+cateId+"]").show();
+                    }else{
+                        cateIds = [];
+                        $(this).html('&#xe623;');
+                        $(this).attr('status','true');
+                        cateId = $(this).parents('tr').attr('cate-id');
+                        getCateId(cateId);
+                        for (var i in cateIds) {
+                            $("tbody tr[cate-id="+cateIds[i]+"]").hide().find('.x-show').html('&#xe623;').attr('status','true');
+                        }
+                    }
+                })
+            });
+
+        }
     });
 
     /*用户-删除*/
@@ -148,32 +152,14 @@
 
     // 分类展开收起的分类的逻辑
     //
-    $(function(){
-        $("tbody.x-cate tr[fid!='0']").hide();
-        // 栏目多级显示效果
-        $('.x-show').click(function () {
-            if($(this).attr('status')=='true'){
-                $(this).html('&#xe625;');
-                $(this).attr('status','false');
-                cateId = $(this).parents('tr').attr('cate-id');
-                $("tbody tr[fid="+cateId+"]").show();
-            }else{
-                cateIds = [];
-                $(this).html('&#xe623;');
-                $(this).attr('status','true');
-                cateId = $(this).parents('tr').attr('cate-id');
-                getCateId(cateId);
-                for (var i in cateIds) {
-                    $("tbody tr[cate-id="+cateIds[i]+"]").hide().find('.x-show').html('&#xe623;').attr('status','true');
-                }
-            }
-        })
-    })
+   /* $(function(){
+
+    })*/
 
     var cateIds = [];
     function getCateId(cateId) {
         $("tbody tr[fid="+cateId+"]").each(function(index, el) {
-            id = $(el).attr('cate-id');
+            let id = $(el).attr('cate-id');
             cateIds.push(id);
             getCateId(id);
         });
