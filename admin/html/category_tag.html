@@ -62,7 +62,6 @@
             set_cate_tag_list();
         });
 
-
         function set_cate_tag_list(){
             $.post(domain + '/category-tag/category-tag-list', function (res) {
                 let code = res.code;
@@ -74,6 +73,8 @@
                     $.each(categoryTagList,function (index,categoryTagOut) {
                         let tags = "";
                         $.each(categoryTagOut.tags,function (index,tag) {
+                            let checkStatusClass = tag.checkStatus===0?'layui-btn-primary':'layui-btn-normal';
+                            let statusClass = tag.status ===0?'layui-btn layui-btn-primary':'layui-btn';
                             tags+='<tr cate-id="'+tag.id+1+'" fid="'+categoryTagOut.id+'">' +
                                 '<td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+tag.id+'</td>' +
                                 '<td>' +
@@ -83,15 +84,17 @@
                                 '<th>'+tag.remark+'</th>'+
                                 '<td>'+tag.creatTime+'</td>' +
                                 '<td>' +
-                                '<button class="layui-btn layui-btn-normal">已审核</button>' +
-                                '<button class="layui-btn">已启用</button>' +
+                                '<button class="checkStatus layui-btn '+checkStatusClass+'" onclick="check_status(this,'+tag.id+',2,'+tag.checkStatus+')">'+tag.checkStatusStr+'</button>' +
+                                '<button class="status '+statusClass+'" onclick="status(this,'+tag.id+',2,'+tag.status+')">'+tag.statusStr+'</button>' +
                                 '</td>' +
-                                '<td class="td-manage">\n' +
+                                '<td class="td-manage">' +
                                 '<button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>' +
-                                '<button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,\'要删除的id\')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
+                                '<button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="status_del(this,'+tag.id+',2)" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
                                 '</td>' +
                                 '</tr>';
                         });
+                        let checkStatusClass = categoryTagOut.checkStatus===0?'layui-btn-primary':'layui-btn-normal';
+                        let statusClass = categoryTagOut.status ===0?'layui-btn layui-btn-primary':'layui-btn';
                         cates ='<tr cate-id='+categoryTagOut.id+' fid="0" >' +
                             '<td>'+categoryTagOut.id+'</td>' +
                             '<td>' +
@@ -99,25 +102,27 @@
                             '</td>' +
                             '<th>'+categoryTagOut.remark+'</th>' +
                             '<td>'+categoryTagOut.creatTime+'</td>' +
-                            '<td>\n' +
-                            '<button class="layui-btn layui-btn-normal">已审核</button>' +
-                            '<button class="layui-btn">已启用</button>' +
-                            '</td>\n' +
+                            '<td>' +
+                            '<button class="checkStatus layui-btn '+checkStatusClass+'" onclick="check_status(this,'+categoryTagOut.id+',1,'+categoryTagOut.checkStatus+')">'+categoryTagOut.checkStatusStr+'</button>' +
+                            '<button class="status '+statusClass+'" onclick="status(this,'+categoryTagOut.id+',1,'+categoryTagOut.status+')">'+categoryTagOut.statusStr+'</button>' +
+                            '</td>' +
                             '<td class="td-manage">' +
                             '<button class="layui-btn "  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>编辑</button>\n' +
                             '<button class="layui-btn layui-btn-warm "  onclick="xadmin.open(\'编辑\',\'admin-edit.html\')" ><i class="layui-icon">&#xe642;</i>添加子标签</button>' +
-                            '<button class="layui-btn-danger layui-btn "  onclick="member_del(this,\'要删除的id\')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
+                            '<button class="layui-btn-danger layui-btn "  onclick="status_del(this,'+categoryTagOut.id+',1)" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
                             '</td>' +
                             '</tr>';
 
                         $(".x-cate").append(cates+tags);
                     });
-
                 }else if(code===102){
-
+                    layer.msg(msg,{icon:5,offset: '20px'},function () {
+                        top.location='../login.html';
+                    })
                 }else {
-
+                    layer.msg(res.msg);
                 }
+
                 $("tbody.x-cate tr[fid!='0']").hide();
                 // 栏目多级显示效果
                 $('.x-show').click(function () {
@@ -142,20 +147,149 @@
         }
     });
 
-    /*用户-删除*/
-    function member_del(obj,id){
-        layer.confirm('确认要删除吗？',function(index){
-            //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
-        });
+
+    function check_status(th,id,co,nowStatus) {
+        let obj={
+            id : id,
+            statusType :2,
+            type :co
+        };
+        let tips ='';
+        let msg='';
+        if(th.innerText==='已审核' || nowStatus===1){
+            obj.status = 0;
+            msg='未审核！';
+            if(co===1){
+                tips = '取消分类审核，该分类下的标签一同取消，确认取消？';
+            }else {
+                tips = '确认取消标签审核？';
+            }
+        }else if(th.innerText==='未审核' || nowStatus===0){
+            obj.status = 1;
+            msg='已审核！';
+            if(co===1){
+                tips = '确认审核分类？';
+            }else {
+                let cateId = $(th).parents("tr").attr("fid");
+                let cate_id_button2_text=$("tbody tr[cate-id="+cateId+"] button")[0].innerText;
+                if(cate_id_button2_text==='未审核'){
+                    layer.msg("请先审核分类！",{icon:2,time:1000});
+                    return;
+                }
+                tips = '确认审核标签？';
+            }
+        }
+        modify_status(th,id,obj,tips,msg)
     }
 
-    // 分类展开收起的分类的逻辑
-    //
-   /* $(function(){
 
-    })*/
+
+    function status(th,id,co,nowStatus) {
+        let obj={
+            id : id,
+            statusType :1,
+            type :co
+        };
+        let tips ='';
+        let msg='';
+        if(th.innerText==='已启用' || nowStatus===1){
+            obj.status = 0;
+            msg='未启用！';
+            if(co===1){
+                tips = '停用分类，该分类下的标签一同停用，确认停用？';
+            }else {
+                tips = '确认停用标签？';
+            }
+        }else if(th.innerText==='未启用' || nowStatus===0){
+            obj.status = 1;
+            msg='已启用！';
+            if(co===1){
+                tips = '确认启用分类？';
+            }else {
+                let cateId = $(th).parents("tr").attr("fid");
+                let cate_id_button2_text=$("tbody tr[cate-id="+cateId+"] button")[1].innerText;
+                if(cate_id_button2_text==='未启用'){
+                    layer.msg("请先启用分类！",{icon:2,time:1000});
+                    return;
+                }
+                tips = '确认启用标签？';
+            }
+        }
+        modify_status(th,id,obj,tips,msg)
+    }
+
+    /*删除*/
+    function status_del(th,id,co){
+        let tips ='';
+        let obj={
+            id : id,
+            status :1,
+            statusType :3,
+            type :co
+        };
+        if(co===1){
+            tips = '删除分类，该分类下的标签一同删除并且不可恢复，确认删除？';
+        }else {
+            tips = '删除标签将不可恢复，确认删除？';
+        }
+        modify_status(th,id,obj,tips,'已删除！');
+    }
+
+
+
+
+    function modify_status(th,id,obj,tips,msg) {
+        layer.confirm(tips,function(index){
+            //发异步删除数据
+            $.post(domain + '/category-tag/modify-status',objToJson(obj), function (res) {
+                if(res.code===200){
+                    if(obj.statusType===3 && obj.status===1){
+                        $(th).parents("tr").remove();
+                    }else if(obj.statusType===2){
+                        if(obj.status===1){
+                            $(th).text("已审核");
+                            $(th).attr('class','layui-btn checkStatus layui-btn-normal');
+                        }else {
+                            if(obj.type===1) {
+                                let fid = $(th).parents("tr").attr("cate-id");
+                                let fid_in_tbody = $("tbody tr[fid=" + fid + "] .checkStatus");
+                                $.each(fid_in_tbody,function (index,f) {
+                                    $(f).text("未审核");
+                                    $(f).attr('class','layui-btn checkStatus layui-btn-primary');
+                                });
+                            }
+                            $(th).text("未审核");
+                            $(th).attr('class','layui-btn checkStatus layui-btn-primary');
+                        }
+                    }else if(obj.statusType===1){
+                        if(obj.status===1){
+                            $(th).text("已启用");
+                            $(th).attr('class','layui-btn status');
+                        }else {
+                            if(obj.type===1) {
+                                let fid = $(th).parents("tr").attr("cate-id");
+                                let fid_in_tbody = $("tbody tr[fid=" + fid + "] .status");
+                                 $.each(fid_in_tbody,function (index,f) {
+                                     $(f).text("未启用");
+                                     $(f).attr('class','status layui-btn layui-btn-primary');
+                                });
+                            }
+                            $(th).text("未启用");
+                            $(th).attr('class','status layui-btn layui-btn-primary');
+
+                        }
+                    }
+                    layer.msg(msg,{icon:1,time:1000});
+                }else if(res.code===102){
+                    layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                        top.location='../login.html'
+                    })
+                }else {
+                    layer.msg(res.msg)
+                }
+            });
+        });
+    }
 
     var cateIds = [];
     function getCateId(cateId) {
