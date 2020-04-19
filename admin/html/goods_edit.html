@@ -287,7 +287,7 @@
                 let qiniuHeadKey = JSON.parse(info).key;
                 let src = up.getOption('domain') + qiniuHeadKey;
                 let goods_add_img_edit_container=$("#goods-add-img-edit-container");
-                goods_add_img_edit_container.before('<td><img class="layui-upload-img layui-anim layui-anim-scale" src="'+src+'"></td>')
+                goods_add_img_edit_container.before('<td class="layui-anim layui-anim-scale"><img class="layui-upload-img" src="'+src+'"></td>')
                 goods_add_img_edit_container.css("display",'none');
                 if($("#pic-img img").length<6){
                     goods_add_img_edit_container.css("display",'block');
@@ -362,7 +362,7 @@
                 let qiniuHeadKey = JSON.parse(info).key;
                 let src = up.getOption('domain') + qiniuHeadKey;
                 let goods_add_img_edit_container=$("#goods-add-detail-img-edit-container");
-                goods_add_img_edit_container.before('<td><img class="layui-upload-img layui-anim layui-anim-scale" src="'+src+'"></td>')
+                goods_add_img_edit_container.before('<td class="layui-anim layui-anim-scale"><img class="layui-upload-img " src="'+src+'"></td>')
                 goods_add_img_edit_container.css("display",'none');
                 if($("#detail-pic-img img").length<6){
                     goods_add_img_edit_container.css("display",'block');
