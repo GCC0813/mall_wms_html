@@ -16,12 +16,12 @@ function initialization(goodsId,loadIndex,index){
                 if(index===1){
                     $.each(data.picUrls, function (index, pic) {
                         //$("#goods-add-img-edit-container").before('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,1)"><i class="layui-icon"></i></button></td>')
-                        $("#pic-img").append('<td><img class="layui-upload-img" src="'+pic+'"></td>');
+                        $("#pic-img").append('<td><img class="layui-upload-img layui-anim layui-anim-scale" src="'+pic+'"></td>');
                     });
                 }
                 if(index===2){
                     $.each(data.picUrls, function (index, pic) {
-                        $("#goods-add-img-edit-container").before('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,1)"><i class="layui-icon"></i></button></td>')
+                        $("#goods-add-img-edit-container").before('<td><img class="layui-upload-img layui-anim layui-anim-scale" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,1)"><i class="layui-icon"></i></button></td>')
                         /*$("#pic-img").append('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,1)"><i class="layui-icon"></i></button></td>');*/
                     });
                 }
@@ -34,12 +34,12 @@ function initialization(goodsId,loadIndex,index){
                 $("#detail-pic-img img").remove();
                 if(index===1){
                     $.each(data.detailPicUrls, function (index, pic) {
-                        $("#detail-pic-img").append('<td><img class="layui-upload-img" src="'+pic+'"></td>');
+                        $("#detail-pic-img").append('<td><img class="layui-upload-img layui-anim layui-anim-scale" src="'+pic+'"></td>');
                     });
                 }
                 if(index===2){
                     $.each(data.detailPicUrls, function (index, pic) {
-                        $("#goods-add-detail-img-edit-container").before('<td><img class="layui-upload-img" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button" onclick="delete_img(this,2)"><i class="layui-icon"></i></button></td>');
+                        $("#goods-add-detail-img-edit-container").before('<td><img class="layui-upload-img layui-anim layui-anim-scale" onmouseover="set_delete_button_isShow(this,1)" onmouseout="set_delete_button_isShow(this,2)" src="'+pic+'"><button class="delete-img-button layui-anim layui-anim-scale" onclick="delete_img(this,2)"><i class="layui-icon"></i></button></td>');
                     });
                 }
             }
