@@ -64,7 +64,11 @@
                     ip : returnCitySN["cip"],
                     role : 0
                 };
+                let loadIndex = layer.load(2);
                 $.post(domain+'/user/login', objToJson(obj), function (res) {
+                    if(res){
+                        layer.close(loadIndex);
+                    }
                     if(res.code === 200){
                         layer.msg("登陆成功 ！",{icon:6},function () {
                             location.href='./html/index.html'

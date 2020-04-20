@@ -77,28 +77,30 @@
                     let cates = "";
                     $.each(categoryTagList, function (index, categoryTagOut) {
                         let tags = "";
-                        $.each(categoryTagOut.tags, function (index, tag) {
-                            let checkStatusClass = tag.checkStatus === 0 ? 'layui-btn-primary layui-btn-radius' : 'layui-btn-normal layui-btn-radius';
-                            let statusClass = tag.status === 0 ? 'layui-btn layui-btn-primary layui-btn-radius' : 'layui-btn layui-btn-radius';
-                            tags += '<tr class="layui-anim layui-anim-scale" cate-id="' + tag.id + 1 + '" fid="' + categoryTagOut.id + '">' +
-                                '<td> &nbsp;&nbsp;&nbsp;' + tag.id + '</td>' +
-                                '<td>' +
-                                '&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                '<i class="layui-icon layui-icon-triangle-d">  </i>' + tag.name + '' +
-                                '</td>' +
-                                '<th>' + tag.remark + '</th>' +
-                                '<td>' + tag.creatTime + '</td>' +
-                                '<td>' +
-                                '<button class="checkStatus layui-btn ' + checkStatusClass + '" onclick="check_status(this,' + tag.id + ',2,' + tag.checkStatus + ')">' + tag.checkStatusStr + '</button>' +
-                                '<button class="status ' + statusClass + '" onclick="status(this,' + tag.id + ',2,' + tag.status + ')">' + tag.statusStr + '</button>' +
-                                '</td>' +
-                                '<td class="td-manage">' +
-                                '<button class="layui-btn layui-btn layui-btn-xs"  onclick="setSessionID('+tag.id+');xadmin.open(\'编辑\',\'tag_edit.html\',500,350)" ><i class="layui-icon">&#xe642;</i>编辑</button>' +
-                                '<button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="status_del(this,' + tag.id + ',2)" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
-                                '</td>' +
-                                '</tr>';
-                        });
-                        let checkStatusClass = categoryTagOut.checkStatus === 0 ? 'layui-btn-primary' : 'layui-btn-normal layui-btn-radius';
+                        if(categoryTagOut.tags!==null && categoryTagOut.tags.length>0){
+                            $.each(categoryTagOut.tags, function (index, tag) {
+                                let checkStatusClass = tag.checkStatus === 0 ? 'layui-btn-primary layui-btn-radius' : 'layui-btn-normal layui-btn-radius';
+                                let statusClass = tag.status === 0 ? 'layui-btn layui-btn-primary layui-btn-radius' : 'layui-btn layui-btn-radius';
+                                tags += '<tr class="layui-anim layui-anim-scale" cate-id="' + tag.id+1 + '" fid="' + categoryTagOut.id + '">' +
+                                    '<td> &nbsp;&nbsp;&nbsp;' + tag.id + '</td>' +
+                                    '<td>' +
+                                    '&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                    '<i class="layui-icon layui-icon-triangle-d">  </i>' + tag.name + '' +
+                                    '</td>' +
+                                    '<th>' + tag.remark + '</th>' +
+                                    '<td>' + tag.creatTime + '</td>' +
+                                    '<td>' +
+                                    '<button class="checkStatus layui-btn ' + checkStatusClass + '" onclick="check_status(this,' + tag.id + ',2,' + tag.checkStatus + ')">' + tag.checkStatusStr + '</button>' +
+                                    '<button class="status ' + statusClass + '" onclick="status(this,' + tag.id + ',2,' + tag.status + ')">' + tag.statusStr + '</button>' +
+                                    '</td>' +
+                                    '<td class="td-manage">' +
+                                    '<button class="layui-btn layui-btn layui-btn-xs"  onclick="setSessionID('+tag.id+');xadmin.open(\'编辑\',\'tag_edit.html\',500,350)" ><i class="layui-icon">&#xe642;</i>编辑</button>' +
+                                    '<button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="status_del(this,' + tag.id + ',2)" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>' +
+                                    '</td>' +
+                                    '</tr>';
+                            });
+                        }
+                        let checkStatusClass = categoryTagOut.checkStatus === 0 ? 'layui-btn-primary layui-btn-radius' : 'layui-btn-normal layui-btn-radius';
                         let statusClass = categoryTagOut.status === 0 ? 'layui-btn layui-btn-primary layui-btn-radius' : 'layui-btn layui-btn-radius';
                         cates = '<tr class="layui-anim layui-anim-scale" cate-id=' + categoryTagOut.id + ' fid="0" >' +
                             '<td>' + categoryTagOut.id + '</td>' +
