@@ -14,9 +14,6 @@
         <script src="../../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/admin.js"></script>
         <script type="text/javascript" src="../js/index.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-        <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     </head>
     <body class="index">
         <!-- 顶部开始 -->
@@ -33,11 +30,8 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;" id="admin-name">Admin</a>
                     <dl class="layui-nav-child">
-                        <!-- 二级菜单 -->
                         <dd>
-                            <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a></dd>
-                        <dd>
-                            <a href="#">退出</a></dd>
+                            <a href="#" id="logOut">退出</a></dd>
                     </dl>
                 </li>
             </ul>
@@ -76,11 +70,6 @@
                                 <a onclick="xadmin.add_tab('订单列表','order-list.html')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>订单列表</cite></a>
-                            </li>
-                            <li>
-                                <a onclick="xadmin.add_tab('商品出仓','cate.html')">
-                                    <i class="iconfont">&#xe6a7;</i>
-                                    <cite>商品出仓</cite></a>
                             </li>
                         </ul>
                     </li>
@@ -178,8 +167,19 @@
                             document.getElementById("admin-name").innerText=indexData.userName ;
                         }
                     });
+                });
+                $("#logOut").click(function () {
+                    $.post(domain+'/user/loginOut', function (res) {
+                        if(res.code === 200){
+                            layer.msg('退出成功！', {
+                                offset: '20px'
+                                ,icon: 1
+                            },function () {
+                                top.location = '../login.html'
+                            });
+                        }
+                    });
                 })
-
             });
         </script>
     </body>

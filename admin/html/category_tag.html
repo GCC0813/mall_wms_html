@@ -260,11 +260,11 @@
                                 let fid_in_tbody = $("tbody tr[fid=" + fid + "] .checkStatus");
                                 $.each(fid_in_tbody,function (index,f) {
                                     $(f).text("未审核");
-                                    $(f).attr('class','layui-btn checkStatus layui-btn-primary');
+                                    $(f).attr('class','layui-btn checkStatus layui-btn-primary layui-btn-radius');
                                 });
                             }
                             $(th).text("未审核");
-                            $(th).attr('class','layui-btn checkStatus layui-btn-primary');
+                            $(th).attr('class','layui-btn checkStatus layui-btn-primary layui-btn-radius');
                         }
                     }else if(obj.statusType===1){
                         if(obj.status===1){

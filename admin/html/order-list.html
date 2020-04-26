@@ -38,51 +38,65 @@
 <script>
     layui.use('table', function(){
         var table = layui.table;
-        table.render({
-            elem: '#order_list'
-            ,url: domain+'/order/list'
-            ,method:'post'
-            ,contentType:'application/json;charset=UTF-8'
-            ,headers:{
-                Accept: '*/*'
-             }
-            ,parseData: function (res) {
-                let loadIndex=layer.load(2);
-                if(res){
-                    layer.close(loadIndex);
-                }
-                let reqs ={
-                    code: res.code,
-                    msg: res.msg,
-                };
-                if(res.code===200){
-                    reqs.count= res.data.count;
-                    reqs.data = res.data.orders
-                    return reqs;
+        $(function () {
+            $.post(domain+'/user/isLogin', function (res) {
+                if(res.code === 102){
+                    layer.msg(res.msg, {icon: 5, offset: '20px'}, function () {
+                        top.location = '../login.html'
+                    })
+                }else if(res.code === 200){
+                    setTable()
                 }else {
                     layer.msg(res.msg);
                 }
-            }
-            ,response: {
-                statusCode: 200 //规定成功的状态码，默认：0
-            }
-            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-            ,defaultToolbar: ['filter', 'exports']
-            ,title: '订单数据表'
-            ,cols: [[
-                {type: 'checkbox', fixed: 'left'}
-                ,{field:'orderId', title:'订单ID', fixed: 'left', unresize: true, sort: true}
-                ,{field:'userNick', title:'购买人', edit: 'text'}
-                ,{field:'goodsName', title:'商品', edit: 'text'}
-                ,{field:'orderPrice', title:'价格', edit: 'text', sort: true}
-                ,{field:'orderDate', title:'日期', sort: true,width: 200}
-                ,{field:'orderStatusStr', title:'状态'}
-                ,{fixed: 'right', title:'操作', toolbar: '#operation',width:200}
-            ]]
-            ,page: true
-            ,loading:false
+            });
         });
-
+        function setTable(){
+            table.render({
+                elem: '#order_list'
+                ,url: domain+'/order/list'
+                ,method:'post'
+                ,contentType:'application/json;charset=UTF-8'
+                ,headers:{
+                    Accept: '*/*'
+                }
+                ,parseData: function (res) {
+                    let loadIndex=layer.load(2);
+                    if(res){
+                        layer.close(loadIndex);
+                    }
+                    let reqs ={
+                        code: res.code,
+                        msg: res.msg,
+                    };
+                    if(res.code===200){
+                        reqs.count= res.data.count;
+                        reqs.data = res.data.orders
+                        return reqs;
+                    }else {
+                        layer.msg(res.msg);
+                    }
+                }
+                ,response: {
+                    statusCode: 200 //规定成功的状态码，默认：0
+                }
+                ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                ,defaultToolbar: ['filter', 'exports']
+                ,title: '订单数据表'
+                ,cols: [[
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field:'orderId', title:'订单ID', fixed: 'left', unresize: true, sort: true}
+                    ,{field:'userNick', title:'购买人', edit: 'text'}
+                    ,{field:'goodsName', title:'商品', edit: 'text'}
+                    ,{field:'orderPrice', title:'价格', edit: 'text', sort: true}
+                    ,{field:'orderDate', title:'日期', sort: true,width: 200}
+                    ,{field:'orderStatusStr', title:'状态'}
+                    ,{fixed: 'right', title:'操作', toolbar: '#operation',width:200}
+                ]]
+                ,page: true
+                ,loading:false
+            });
+        }
         //头工具栏事件
         table.on('toolbar(table)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);

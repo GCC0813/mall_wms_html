@@ -9,13 +9,18 @@
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <link rel="stylesheet" href="css/font.css">
     <link rel="stylesheet" href="css/login.css">
-	  <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script type="text/javascript" src="../comm/jquery.slider.css"></script>
     <script type="text/javascript" src="../comm/jquery.js"></script>
+    <link rel="stylesheet" href="../comm/jquery.slider.css" />
+    <script type="text/javascript" src="../comm/jquery.slider.min.js"></script>
     <script src="../lib/layui/layui.js" charset="utf-8"></script>
+
+
 </head>
 <body class="login-bg layui-anim layui-anim-scale">
-    
-    <div class="login ">
+
+    <div class="login">
         <div class="message">商城仓储后台登陆</div>
         <div id="darkbannerwrap"></div>
         
@@ -24,7 +29,9 @@
             <hr class="hr15">
             <input name="password" lay-verify="passWord" placeholder="密码"  type="password" class="layui-input">
             <hr class="hr15">
-            <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+            <div id="slider1" class="slider"></div>
+            <hr class="hr15">
+            <button type="button" class="layui-btn layui-btn-disabled" lay-submit lay-filter="login" style="width:100%;height: 50px" type="submit">登录</button>
             <hr class="hr20" >
         </form>
     </div>
@@ -34,7 +41,27 @@
     <script src="../comm/comm.js" charset="utf-8"></script>
     <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script>
+
         $(function  () {
+            $(".layui-btn").attr("disabled","disabled");
+            $("#slider1").slider({
+                width: 340, // width
+                height: 40, // height
+                sliderBg: "rgb(145,145,142)", // 滑块背景颜色
+                color: "rgb(255, 255, 255)", // 文字颜色
+                fontSize: 14, // 文字大小
+                bgColor: "#189F92", // 背景颜色
+                textMsg: "按住滑块，拖拽验证", // 提示文字
+                successMsg: "验证通过，请登录", // 验证成功提示文字
+                successColor: "white", // 滑块验证成功提示文字颜色
+                time: 400, // 返回时间
+                callback: function(result) {
+                    if(result===true){
+                        $(".layui-btn").attr("class","layui-btn").removeAttr("disabled");
+                    }
+                }
+            });
+
             layui.use('form', function(){
             layer.msg('欢迎登陆商城仓储管理系统！', {
                 offset: '20px'
