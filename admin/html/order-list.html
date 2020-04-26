@@ -42,7 +42,10 @@
             elem: '#order_list'
             ,url: domain+'/order/list'
             ,method:'post'
-            ,contentType:'application/json'
+            ,contentType:'application/json;charset=UTF-8'
+            ,headers:{
+                Accept: '*/*'
+             }
             ,parseData: function (res) {
                 let loadIndex=layer.load(2);
                 if(res){
@@ -55,14 +58,10 @@
                 if(res.code===200){
                     reqs.count= res.data.count;
                     reqs.data = res.data.orders
-                }else if(res.code===102){
-                    layer.msg(res.msg, {icon: 5, offset: '20px'}, function () {
-                        top.location = '../login.html';
-                    });
+                    return reqs;
                 }else {
                     layer.msg(res.msg);
                 }
-                return reqs;
             }
             ,response: {
                 statusCode: 200 //规定成功的状态码，默认：0

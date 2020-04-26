@@ -11,11 +11,6 @@
     <link rel="stylesheet" href="../css/admin.css">
     <script src="../../lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/admin.js"></script>
-    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 </head>
 <body>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
@@ -87,20 +82,16 @@
                 }
                 if (res.code === 200) {
                     $("#order-no").attr("placeholder", res.data.orderNo)
-                } else if (res.code === 102) {
-                    layer.msg(res.msg, {icon: 5, offset: '20px'}, function () {
-                        top.location = '../login.html'
-                    })
-                } else {
-                    layer.msg(res.msg)
-                }
-            });
-            $.post(domain + '/order/logistics-company', function (res) {
-                if (res.code === 200) {
-                    $.each(res.data.list, function (index, com) {
-                        $("#campany").append('<option value="' + com.id + '">' + com.name + '</option>');
+                    $.post(domain + '/order/logistics-company', function (res) {
+                        if (res.code === 200) {
+                            $.each(res.data.list, function (index, com) {
+                                $("#campany").append('<option value="' + com.id + '">' + com.name + '</option>');
+                            });
+                            form.render('select');
+                        } else {
+                            layer.msg(res.msg)
+                        }
                     });
-                    form.render('select');
                 } else if (res.code === 102) {
                     layer.msg(res.msg, {icon: 5, offset: '20px'}, function () {
                         top.location = '../login.html'
@@ -112,7 +103,7 @@
         });
 
         //监听提交
-        form.on('submit(add)', function(data) {
+        /*form.on('submit(add)', function(data) {
             let company = data.field.campany;
             if(parseInt(company)===0){
                 layer.msg("请选择物流公司！")
@@ -150,7 +141,7 @@
                 }
             });
             return false;
-        });
+        });*/
 
     });
 </script>

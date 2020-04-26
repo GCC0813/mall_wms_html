@@ -12,11 +12,6 @@
         <link rel="stylesheet" href="../css/admin.css">
         <script src="../../comm/jquery.js"></script>
         <script src="../../comm/comm.js"></script>
-        <script>
-            $.post(domain + '/home/get-statistics', function (res) {
-                set_up_line_chart(res.data)
-            });
-        </script>
     </head>
     <body>
         <div class="layui-fluid layui-anim layui-anim-scale">
@@ -31,66 +26,82 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="../../lib/layui/layui.js" ></script>
         <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
         <script type="text/javascript">
-                // 基于准备好的dom，初始化echarts实例
-                // 指定图表的配置项和数据
-                function set_up_line_chart(data) {
-                    var option = {
-                        title: {
-                            text: '折线图堆叠'
+            layui.use('layer', function(){
+                $(function () {
+                    $.post(domain + '/home/get-statistics', function (res) {
+                        if(res.code===200){
+                            set_up_line_chart(res.data)
+                        }else if(res.code===102){
+                            layer.msg(res.msg,{icon:5,offset: '20px'},function () {
+                                top.location='../login.html'
+                            })
+                        }else {
+                            layer.msg(res.msg)
+                        }
+                    });
+                })
+            });
+            // 基于准备好的dom，初始化echarts实例
+            // 指定图表的配置项和数据
+            function set_up_line_chart(data) {
+                var option = {
+                    title: {
+                        text: '折线图堆叠'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['会员数量', '商品数量', '订单数量']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: data.months
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '会员数量',
+                            type: 'line',
+                            stack: '总量',
+                            data: data.userNum
                         },
-                        tooltip: {
-                            trigger: 'axis'
+                        {
+                            name: '商品数量',
+                            type: 'line',
+                            stack: '总量',
+                            data: data.goodsNum
                         },
-                        legend: {
-                            data:['会员数量','商品数量','订单数量']
+                        {
+                            name: '订单数量',
+                            type: 'line',
+                            stack: '总量',
+                            data: data.orderNum
                         },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        toolbox: {
-                            feature: {
-                                saveAsImage: {}
-                            }
-                        },
-                        xAxis: {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: data.months
-                        },
-                        yAxis: {
-                            type: 'value'
-                        },
-                        series: [
-                            {
-                                name:'会员数量',
-                                type:'line',
-                                stack: '总量',
-                                data: data.userNum
-                            },
-                            {
-                                name:'商品数量',
-                                type:'line',
-                                stack: '总量',
-                                data:[220, 182, 191, 234, 290, 330, 310]
-                            },
-                            {
-                                name:'订单数量',
-                                type:'line',
-                                stack: '总量',
-                                data:[150, 232, 201, 154, 190, 330, 410]
-                            },
 
-                        ]
-                    };
-                    var myChart = echarts.init(document.getElementById('main'));
-                    // 使用刚指定的配置项和数据显示图表。
-                    myChart.setOption(option);
-                }
+                    ]
+                };
+                var myChart = echarts.init(document.getElementById('main'));
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
     </script>
     </body>
 </html>
